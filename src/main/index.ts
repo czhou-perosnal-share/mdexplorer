@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog, shell, Menu } from 'electron';
 import path from 'node:path';
 import fs from 'node:fs';
 import started from 'electron-squirrel-startup';
-import { getState, setState, type AppState } from './main/store';
+import { getState, setState, type AppState } from './store';
 
 if (started) {
   app.quit();

@@ -1,5 +1,5 @@
 # Build and reinstall MdExplorer locally
-Set-Location $PSScriptRoot
+Set-Location (Split-Path $PSScriptRoot -Parent)
 
 Write-Host "Building MdExplorer..." -ForegroundColor Cyan
 npm run make
