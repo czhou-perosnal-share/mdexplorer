@@ -1,0 +1,32 @@
+.viewer-content {
+  --md-bg: #ffffff;
+  --md-text: #24292e;
+  --md-heading-color: #24292e;
+  --md-heading-border: #eaecef;
+  --md-code-bg: #f6f8fa;
+  --md-code-text: #24292e;
+  --md-code-border: #e1e4e8;
+  --md-link: #0366d6;
+  --md-blockquote-border: #dfe2e5;
+  --md-blockquote-text: #6a737d;
+  --md-table-border: #dfe2e5;
+  --md-table-alt-bg: #f6f8fa;
+  --md-hr-color: #e1e4e8;
+}
+
+/* highlight.js github theme */
+.viewer-content .hljs { background: var(--md-code-bg); color: #24292e; }
+.viewer-content .hljs-doctag,.viewer-content .hljs-keyword,.viewer-content .hljs-meta .hljs-keyword,.viewer-content .hljs-template-tag,.viewer-content .hljs-template-variable,.viewer-content .hljs-type,.viewer-content .hljs-variable.language_ { color: #d73a49; }
+.viewer-content .hljs-title,.viewer-content .hljs-title.class_,.viewer-content .hljs-title.class_.inherited__,.viewer-content .hljs-title.function_ { color: #6f42c1; }
+.viewer-content .hljs-attr,.viewer-content .hljs-attribute,.viewer-content .hljs-literal,.viewer-content .hljs-meta,.viewer-content .hljs-number,.viewer-content .hljs-operator,.viewer-content .hljs-selector-attr,.viewer-content .hljs-selector-class,.viewer-content .hljs-selector-id,.viewer-content .hljs-variable { color: #005cc5; }
+.viewer-content .hljs-meta .hljs-string,.viewer-content .hljs-regexp,.viewer-content .hljs-string { color: #032f62; }
+.viewer-content .hljs-built_in,.viewer-content .hljs-symbol { color: #e36209; }
+.viewer-content .hljs-code,.viewer-content .hljs-comment,.viewer-content .hljs-formula { color: #6a737d; }
+.viewer-content .hljs-name,.viewer-content .hljs-quote,.viewer-content .hljs-selector-pseudo,.viewer-content .hljs-selector-tag { color: #22863a; }
+.viewer-content .hljs-subst { color: #24292e; }
+.viewer-content .hljs-section { color: #005cc5; font-weight: bold; }
+.viewer-content .hljs-bullet { color: #735c0f; }
+.viewer-content .hljs-emphasis { color: #24292e; font-style: italic; }
+.viewer-content .hljs-strong { color: #24292e; font-weight: bold; }
+.viewer-content .hljs-addition { color: #22863a; background-color: #f0fff4; }
+.viewer-content .hljs-deletion { color: #b31d28; background-color: #ffeef0; }

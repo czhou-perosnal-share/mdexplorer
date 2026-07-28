@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- App background -->
+  <rect width="256" height="256" rx="44" fill="#0D5C63"/>
+
+  <!-- Paper shadow -->
+  <rect x="60" y="44" width="140" height="170" rx="8" fill="#000000" opacity="0.15"/>
+
+  <!-- Paper body -->
+  <rect x="54" y="38" width="140" height="170" rx="8" fill="#FFFFFF"/>
+
+  <!-- Page fold: filled triangle covering the top-right corner -->
+  <polygon points="154,38 194,38 194,78" fill="#0B4F55"/>
+  <!-- Page fold flap -->
+  <polygon points="154,38 194,78 154,78" fill="#E0F2F1"/>
+
+  <!-- Text lines -->
+  <rect x="70" y="96" width="80" height="7" rx="3.5" fill="#0D5C63" opacity="0.28"/>
+  <rect x="70" y="114" width="100" height="7" rx="3.5" fill="#0D5C63" opacity="0.20"/>
+  <rect x="70" y="132" width="68" height="7" rx="3.5" fill="#0D5C63" opacity="0.20"/>
+  <rect x="70" y="150" width="90" height="7" rx="3.5" fill="#0D5C63" opacity="0.20"/>
+
+  <!-- .md badge -->
+  <rect x="62" y="170" width="72" height="26" rx="5" fill="#0D5C63"/>
+  <text x="98" y="189"
+    text-anchor="middle"
+    font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+    font-size="16"
+    font-weight="700"
+    letter-spacing="0.5"
+    fill="#FFFFFF">.md</text>
+</svg>
