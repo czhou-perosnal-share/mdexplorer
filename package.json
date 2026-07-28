@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "test": "vitest run --config vite.test.config.ts"
+    "test": "vitest run --config config/vite.test.config.ts"
   },
   "keywords": [],
   "author": {

@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import type { TreeNode } from './main';
-import type { AppState } from './main/store';
+import type { TreeNode } from '../main';
+import type { AppState } from '../main/store';
 
 export interface ReadFileResult {
   content: string;
