@@ -1,0 +1,25 @@
+.viewer-content {
+  --md-bg: #ffffff;
+  --md-text: #000000;
+  --md-heading-color: #000000;
+  --md-heading-border: #cccccc;
+  --md-code-bg: #f5f5f5;
+  --md-code-text: #333333;
+  --md-code-border: #cccccc;
+  --md-link: #0000ee;
+  --md-blockquote-border: #aaaaaa;
+  --md-blockquote-text: #555555;
+  --md-table-border: #cccccc;
+  --md-table-alt-bg: #f9f9f9;
+  --md-hr-color: #cccccc;
+}
+
+/* highlight.js plain/default */
+.viewer-content .hljs { background: var(--md-code-bg); color: #333333; }
+.viewer-content .hljs-comment,.viewer-content .hljs-quote { color: #777777; font-style: italic; }
+.viewer-content .hljs-keyword,.viewer-content .hljs-selector-tag,.viewer-content .hljs-literal,.viewer-content .hljs-type { color: #000080; font-weight: bold; }
+.viewer-content .hljs-string,.viewer-content .hljs-doctag { color: #008000; }
+.viewer-content .hljs-number { color: #0000ff; }
+.viewer-content .hljs-built_in,.viewer-content .hljs-name { color: #7f0000; }
+.viewer-content .hljs-title,.viewer-content .hljs-function { color: #0000cc; }
+.viewer-content .hljs-attr { color: #7f0000; }
