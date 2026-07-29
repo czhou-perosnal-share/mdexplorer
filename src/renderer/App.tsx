@@ -39,6 +39,19 @@ function folderBasename(p: string): string {
   return p.replace(/[/\\]+$/, '').split(/[/\\]/).pop() || p;
 }
 
+function RefreshIcon({ spinning }: { spinning: boolean }) {
+  return (
+    <svg
+      width="13" height="13" viewBox="0 0 16 16" fill="none"
+      stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+      className={spinning ? 'tree-refresh-btn__icon--spinning' : undefined}
+    >
+      <path d="M13.5 8a5.5 5.5 0 1 1-1.1-3.3" />
+      <polyline points="13.5 2 13.5 5.5 10 5.5" />
+    </svg>
+  );
+}
+
 interface FileData {
   content: string;
   lineCount: number;
@@ -57,6 +70,7 @@ export function App() {
   const [openPathError, setOpenPathError] = useState<string>('');
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
+  const [isTreeLoading, setIsTreeLoading] = useState(false);
   const initialized = useRef(false);
 
   const persistState = useCallback((patch: Partial<AppState>) => {
@@ -169,8 +183,10 @@ export function App() {
     setTreeMode(next);
     persistState({ treeMode: next });
     if (rootFolder) {
+      setIsTreeLoading(true);
       const scanned = await window.api.scanFolder(rootFolder, next);
       setTree(scanned);
+      setIsTreeLoading(false);
     }
   }, [treeMode, rootFolder, persistState]);
 
@@ -184,6 +200,21 @@ export function App() {
       await loadFolder(folder);
     }
   }, [loadFolder]);
+
+  const handleRefresh = useCallback(async () => {
+    if (!rootFolder || isTreeLoading) return;
+    setIsTreeLoading(true);
+    await loadFolder(rootFolder, treeMode);
+    setIsTreeLoading(false);
+  }, [rootFolder, treeMode, isTreeLoading, loadFolder]);
+
+  useEffect(() => {
+    const handleF5 = (e: KeyboardEvent) => {
+      if (e.key === 'F5') { e.preventDefault(); handleRefresh(); }
+    };
+    window.addEventListener('keydown', handleF5);
+    return () => window.removeEventListener('keydown', handleF5);
+  }, [handleRefresh]);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -297,6 +328,7 @@ export function App() {
       <div className="panels-container">
         <PanelGroup orientation="horizontal">
           <Panel defaultSize={30} minSize={15} className="panel panel--tree">
+            {isTreeLoading && <div className="tree-panel-overlay" />}
             <div className="tree-filter-row">
               <input
                 className="tree-filter"
@@ -308,13 +340,23 @@ export function App() {
             </div>
             <div className="tree-files-header">
               <span className="tree-files-label">Files</span>
-              <button
-                className="tree-mode-toggle"
-                onClick={handleTreeModeToggle}
-                title={treeMode === 'md-only' ? 'MD Only — click to show all files' : 'All Files — click to show MD only'}
-              >
-                {treeMode === 'md-only' ? 'MD only' : 'All files'}
-              </button>
+              <div className="tree-files-actions">
+                <button
+                  className="tree-refresh-btn"
+                  onClick={handleRefresh}
+                  disabled={!rootFolder || isTreeLoading}
+                  title="Refresh folder (F5)"
+                >
+                  <RefreshIcon spinning={isTreeLoading} />
+                </button>
+                <button
+                  className="tree-mode-toggle"
+                  onClick={handleTreeModeToggle}
+                  title={treeMode === 'md-only' ? 'MD Only — click to show all files' : 'All Files — click to show MD only'}
+                >
+                  {treeMode === 'md-only' ? 'MD only' : 'All files'}
+                </button>
+              </div>
             </div>
             <FolderTree
               tree={tree}
