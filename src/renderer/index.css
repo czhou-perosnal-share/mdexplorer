@@ -92,7 +92,7 @@ body {
 .panels-container { flex: 1; overflow: hidden; display: flex; }
 .panels-container > div { width: 100%; }
 .panel { overflow: hidden; display: flex; flex-direction: column; }
-.panel--tree { background: var(--color-bg); border-right: 1px solid var(--color-neutral-700); }
+.panel--tree { background: var(--color-bg); border-right: 1px solid var(--color-neutral-700); position: relative; }
 .panel--viewer { background: var(--color-bg); display: flex; flex-direction: column; }
 
 .resize-handle {
@@ -142,6 +142,41 @@ body {
   flex-shrink: 0;
 }
 .tree-mode-toggle:hover { background: var(--color-neutral-800); color: var(--color-neutral-200); }
+
+.tree-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 24, 38, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tree-files-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.tree-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 4px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tree-refresh-btn:hover { background: var(--color-neutral-800); color: var(--color-neutral-200); }
+.tree-refresh-btn:disabled { opacity: 0.4; cursor: default; }
+.tree-refresh-btn:disabled:hover { background: transparent; color: var(--color-neutral-400); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.tree-refresh-btn__icon--spinning { animation: spin 0.7s linear infinite; }
 
 /* Sidebar file filter */
 .tree-filter {
