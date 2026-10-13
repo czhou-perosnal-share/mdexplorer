@@ -1,0 +1,27 @@
+.viewer-content {
+  --md-bg: #2e3440;
+  --md-text: #d8dee9;
+  --md-heading-color: #eceff4;
+  --md-heading-border: #4c566a;
+  --md-code-bg: #3b4252;
+  --md-code-text: #d8dee9;
+  --md-code-border: #4c566a;
+  --md-link: #88c0d0;
+  --md-blockquote-border: #5e81ac;
+  --md-blockquote-text: #a8b2c6;
+  --md-table-border: #4c566a;
+  --md-table-alt-bg: #3b4252;
+  --md-hr-color: #4c566a;
+}
+
+/* highlight.js nord theme */
+.viewer-content .hljs { background: var(--md-code-bg); color: #d8dee9; }
+.viewer-content .hljs-keyword,.viewer-content .hljs-selector-tag,.viewer-content .hljs-title,.viewer-content .hljs-section,.viewer-content .hljs-doctag,.viewer-content .hljs-name,.viewer-content .hljs-strong { color: #81a1c1; }
+.viewer-content .hljs-code,.viewer-content .hljs-addition,.viewer-content .hljs-description { color: #a3be8c; }
+.viewer-content .hljs-class,.viewer-content .hljs-built_in { color: #8fbcbb; }
+.viewer-content .hljs-attr,.viewer-content .hljs-link,.viewer-content .hljs-literal,.viewer-content .hljs-number,.viewer-content .hljs-type { color: #b48ead; }
+.viewer-content .hljs-bullet,.viewer-content .hljs-string,.viewer-content .hljs-symbol,.viewer-content .hljs-template-variable,.viewer-content .hljs-variable { color: #a3be8c; }
+.viewer-content .hljs-comment,.viewer-content .hljs-quote,.viewer-content .hljs-deletion,.viewer-content .hljs-meta { color: #616e88; }
+.viewer-content .hljs-title.function_ { color: #88c0d0; }
+.viewer-content .hljs-attribute { color: #d8dee9; }
+.viewer-content .hljs-template-tag { color: #81a1c1; }
