@@ -47,11 +47,11 @@ MdExplorer is built for the person who just needs to **read and present**.
 
 | What you need | What MdExplorer delivers | How it works |
 |---|---|---|
-| ⚡ **Get to the content fast** | Point it at a folder and start reading. Folders load only when you open them, so even very large documentation trees stay responsive. | A lazy folder tree reads one directory level at a time, with all file access running in the background so the window never freezes. |
-| 🔎 **Find the right page** | Search across file names and contents, and keep reading while results arrive. | The search runs in the background, streams results as it finds them, can be stopped at any time, and covers Markdown files only. |
-| 🔗 **Follow the story across documents** | Click a link and the target opens in a tab, never twice. Jump back and forth without losing your place. | Links to other `.md` files open (or re-activate) a tab without touching the folder tree. Web links open in your browser. |
-| 🎨 **Present with confidence** | Clean, consistent rendering with polished themes: Nocturne, Light, Graphite and High contrast. | The interface theme and the document theme are separate settings (**File → Settings**, `Ctrl+,`), so you can mix them. |
-| 🔒 **Zero risk to your files** | Strictly read-only. MdExplorer never modifies, moves or deletes anything. | The app contains no code that writes to your documents. It only saves its own settings (last folder, tabs, theme). |
+| ⏱️ **Get to the content fast** | Point it at a folder and start reading. Folders load only when you open them, so even very large documentation trees stay responsive. | A lazy folder tree reads one directory level at a time, with all file access running in the background so the window never freezes. |
+| 🧭 **Find the right page** | Search across file names and contents, and keep reading while results arrive. | The search runs in the background, streams results as it finds them, can be stopped at any time, and covers Markdown files only. |
+| 📚 **Follow the story across documents** | Click a link and the target opens in a tab, never twice. Jump back and forth without losing your place. | Links to other `.md` files open (or re-activate) a tab without touching the folder tree. Web links open in your browser. |
+| 🖼️ **Present with confidence** | Clean, consistent rendering with polished themes: Nocturne, Light, Graphite and High contrast. | The interface theme and the document theme are separate settings (**File → Settings**, `Ctrl+,`), so you can mix them. |
+| 🛡️ **Zero risk to your files** | Strictly read-only. MdExplorer never modifies, moves or deletes anything. | The app contains no code that writes to your documents. It only saves its own settings (last folder, tabs, theme). |
 | 🪶 **No overhead** | No accounts, no cloud, no subscription, no database, no plugins to maintain. | Everything runs locally in one window. |
 
 ### Built to be focused, not feature-rich
