@@ -17,6 +17,10 @@ Open a huge docs folder instantly, search it without freezing, and read in a the
 
 </div>
 
+<p align="center">
+  <img src="docs/images/mdexplorer-main-window.png" alt="MdExplorer main window: folder tree, tabs and a rendered Markdown document" width="900" />
+</p>
+
 ---
 
 ## ✨ Features

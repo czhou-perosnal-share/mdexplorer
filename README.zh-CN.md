@@ -17,6 +17,10 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/images/mdexplorer-main-window.png" alt="MdExplorer 主界面：文件夹树、标签页和渲染后的 Markdown 文档" width="900" />
+</p>
+
 ---
 
 ## ✨ 功能特性
