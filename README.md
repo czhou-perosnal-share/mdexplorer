@@ -44,6 +44,8 @@ MdExplorer is built for the person who just needs to **read and present**.
 
 We say "no" to editing, note management, sync, publishing and plugins, on purpose. Fewer moving parts means less to learn, less to maintain and less that can go wrong. Need to write? Keep your favorite editor open and let MdExplorer be the reader next to it.
 
+*Where each claim comes from, and what is not proven yet: [docs/PRODUCT.md](docs/PRODUCT.md).*
+
 ## ✨ Features
 
 | | |

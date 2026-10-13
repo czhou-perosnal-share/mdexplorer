@@ -54,6 +54,10 @@ User-visible behavior is specified with [OpenSpec](https://github.com/Fission-AI
 
 For a new feature or a behavior change, create a change (`openspec new change "<name>"`, or `/opsx:propose` in Claude Code), keep its tasks up to date while you work, and archive it when done (`openspec archive <name>`). Pure bug fixes and refactors that do not change behavior do not need one.
 
+## Scope
+
+MdExplorer is a focused, read-only Markdown viewer. Before proposing a feature, check it against the principles in [docs/PRODUCT.md](docs/PRODUCT.md): features that help reading and presenting are welcome, while editing, sync, publishing and plugins are out of scope.
+
 ## Code guidelines
 
 - **TypeScript and React.** Function components and hooks. Match the style of the surrounding code (naming, comment density, formatting).
