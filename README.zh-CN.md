@@ -64,7 +64,7 @@ npm run make
 
 想先试用而不安装？运行 `npm start` 打开开发窗口，或运行 `npm run package` 在 `out/` 下生成免安装的应用并直接启动。
 
-更新时：拉取最新代码，再次运行 `npm run make` 并重新运行安装程序即可。
+更新时：拉取最新代码，再次运行 `npm run make` 并重新运行安装程序即可。在 Windows 上，`scripts/reinstall.ps1` 可一步完成：构建、卸载旧版本并安装新版本。
 
 ### 打开文件夹
 
@@ -126,7 +126,7 @@ openspec/       # 规格与变更历史（OpenSpec）
 
 ## 🤝 参与贡献
 
-欢迎提交 Issue 和 Pull Request。请从 `main` 分支创建分支，保持改动聚焦，并向 `main` 提交 PR。行为层面的变更以 OpenSpec 变更的形式记录在 [`openspec/`](openspec/) 下。
+欢迎提交 Issue 和 Pull Request。请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)（英文）了解工作流程，并参阅 [docs/TECH.md](docs/TECH.md)（英文）了解技术栈、目录结构与架构。行为层面的变更以 OpenSpec 变更的形式记录在 [`openspec/`](openspec/) 下。
 
 ## 📄 许可证
 

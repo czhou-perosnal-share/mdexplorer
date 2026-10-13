@@ -64,7 +64,7 @@ Linux builds additionally need the packaging tools on the build machine (`dpkg` 
 
 Want to try the app without installing? Run `npm start` for a development window, or `npm run package` to produce an unpacked app in `out/` that you can launch directly.
 
-To update, pull the latest code, run `npm run make` again and re-run the installer.
+To update, pull the latest code, run `npm run make` again and re-run the installer. On Windows, `scripts/reinstall.ps1` does all of this in one step: build, uninstall the old version and install the new one.
 
 ### Open a folder
 
@@ -126,7 +126,7 @@ openspec/       # Specs and change history (OpenSpec)
 
 ## 🤝 Contributing
 
-Issues and pull requests are welcome. Please branch from `main`, keep changes focused, and open a PR against `main`. Behavior changes are tracked as OpenSpec changes under [`openspec/`](openspec/).
+Issues and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow, and [docs/TECH.md](docs/TECH.md) for the tech stack, folder structure and architecture. Behavior changes are tracked as OpenSpec changes under [`openspec/`](openspec/).
 
 ## 📄 License
 

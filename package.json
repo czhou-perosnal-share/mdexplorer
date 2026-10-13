@@ -13,7 +13,22 @@
     "lint": "eslint --ext .ts,.tsx .",
     "test": "vitest run --config config/vite.test.config.ts"
   },
-  "keywords": [],
+  "keywords": [
+    "markdown",
+    "markdown-viewer",
+    "markdown-browser",
+    "electron",
+    "react",
+    "desktop"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/czhou-perosnal-share/mdexplorer.git"
+  },
+  "homepage": "https://github.com/czhou-perosnal-share/mdexplorer#readme",
+  "bugs": {
+    "url": "https://github.com/czhou-perosnal-share/mdexplorer/issues"
+  },
   "author": {
     "name": "chao.zhou",
     "email": "60565646+chaozhou-seismic@users.noreply.github.com"
