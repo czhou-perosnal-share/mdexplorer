@@ -28,8 +28,12 @@ The folder tree SHALL be loaded lazily: opening a folder lists only its first le
 
 #### Scenario: Directory without Markdown in MD-only mode
 - **WHEN** a subdirectory contains no `.md` files and the tree is in MD-only mode
-- **THEN** the subdirectory is still listed and shows "No Markdown files found" style emptiness when expanded
+- **THEN** the subdirectory is still listed, and expanding it shows no entries
 
 #### Scenario: Ignored directories in MD-only mode
 - **WHEN** the folder contains `.git` or `node_modules` and the tree is in MD-only mode
 - **THEN** those directories do not appear
+
+#### Scenario: Empty subdirectory visible in Full mode
+- **WHEN** a subdirectory contains no `.md` files at any depth and the tree is in Full mode
+- **THEN** that subdirectory appears in the tree

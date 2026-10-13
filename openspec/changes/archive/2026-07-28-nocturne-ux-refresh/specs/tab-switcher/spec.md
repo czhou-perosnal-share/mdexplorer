@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Tab switcher overlay uses Nocturne chrome variables
 The tab switcher overlay (backdrop and modal card) SHALL use the Nocturne dark design system tokens for its background, border, text, and accent colors, consistent with the rest of the app chrome.

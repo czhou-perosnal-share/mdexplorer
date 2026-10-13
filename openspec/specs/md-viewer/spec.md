@@ -1,5 +1,7 @@
-## Requirements
+## Purpose
 
+Defines how Markdown documents are rendered and scrolled in the viewer and what the status bar shows.
+## Requirements
 ### Requirement: Render Markdown with visual styling
 The viewer panel SHALL render Markdown files with styled formatting including headings (H1–H6), bold, italic, inline code, fenced code blocks with syntax highlighting, ordered and unordered lists, blockquotes, horizontal rules, and tables (GFM). The rendering SHALL convert Markdown to HTML using a well-established library (e.g., `marked`) and display it in a Chromium webview.
 
@@ -31,7 +33,11 @@ The viewer panel SHALL be scrollable via mouse wheel and keyboard. Keyboard keys
 - **THEN** the document scrolls to the last line
 
 ### Requirement: Show file metadata in status bar
-The application SHALL display the currently open file's relative path and total line count in a status bar at the bottom of the window.
+The application SHALL display the currently open file's relative path and total line count in a status bar at the bottom of the window. The line count SHALL be displayed as a small neutral pill tag.
+
+#### Scenario: Status bar shows line count as a tag
+- **WHEN** a file is open in the viewer
+- **THEN** the status bar shows the relative path from the root folder and a pill-styled tag with the document's line count
 
 #### Scenario: Status bar content
 - **WHEN** a file is open in the viewer
@@ -67,3 +73,11 @@ The viewer SHALL NOT execute any scripts present in the rendered Markdown HTML. 
 #### Scenario: Script tag in Markdown blocked
 - **WHEN** a Markdown file contains a `<script>` tag or inline event handler
 - **THEN** the script is not executed; the tag may be rendered as escaped text or stripped
+
+### Requirement: Render full file contents without truncation
+The viewer SHALL render Markdown files in their entirety regardless of file size. There is no line limit, no truncation banner, and no "truncated" indicator in the status bar.
+
+#### Scenario: Large file renders completely
+- **WHEN** a file has more than 10,000 lines
+- **THEN** the full file content is rendered; no warning banner appears; the status bar shows the actual line count without any truncation indicator
+

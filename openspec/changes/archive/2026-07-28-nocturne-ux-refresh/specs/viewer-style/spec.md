@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Scoped content theme (replaces whole-app theme)
 The application SHALL provide a `contentTheme` selector in the nav bar that controls the visual style of the **Markdown document pane only**. The app chrome (toolbar, sidebar, tabs, status bar) SHALL always use the fixed Nocturne dark design system, regardless of the selected content theme. There is no user-facing chrome theme choice.
@@ -35,8 +35,3 @@ The selected `contentTheme` SHALL be saved to session state and restored on the 
 #### Scenario: Default content theme on first launch
 - **WHEN** no session state exists (first launch)
 - **THEN** the `nocturne` content theme is used as the default
-
-## REMOVED Requirements
-
-### Removed: Whole-app theme selection
-The previous requirement that themes affect the entire application (toolbar, sidebar, tabs) is removed. Theme selection is now scoped to the document pane only via `contentTheme`. The View menu theme submenu is also removed.

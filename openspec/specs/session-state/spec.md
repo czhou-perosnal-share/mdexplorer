@@ -1,3 +1,7 @@
+## Purpose
+
+Defines which session state (folder, tabs, scroll positions, themes) is persisted and restored.
+
 ## Requirements
 
 ### Requirement: Remember last viewed document

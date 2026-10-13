@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Pill-style tab presentation with accent underline
 Tab items in the tab bar SHALL use a pill shape (`border-radius: 4px`) and indicate the active tab via a 2px accent-colored underline (`#9184d9`) rather than a filled background color. The inactive tab hover state uses a subtle dark background tint.

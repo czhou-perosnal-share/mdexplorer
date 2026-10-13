@@ -1,3 +1,7 @@
+## Purpose
+
+Defines the context menu available on document tabs.
+
 ## Requirements
 
 ### Requirement: Right-click context menu on tabs

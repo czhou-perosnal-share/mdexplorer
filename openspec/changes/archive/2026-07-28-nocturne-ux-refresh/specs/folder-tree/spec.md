@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Icon-forward tree item presentation
 Directory nodes and file nodes in the folder tree SHALL use simple SVG line icons (not ASCII characters or emoji) to identify their type. Directory nodes display a folder icon. Markdown file nodes display a document icon. Non-Markdown file nodes (visible in Full mode) display the same document icon with a dimmed appearance and a neutral "bin" tag at the far right of the row.

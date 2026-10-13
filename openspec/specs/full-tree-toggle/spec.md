@@ -1,3 +1,7 @@
+## Purpose
+
+Defines the toggle between the MD-only and the full (all files) folder tree modes.
+
 ## Requirements
 
 ### Requirement: Toggle between MD-only and full folder tree modes
