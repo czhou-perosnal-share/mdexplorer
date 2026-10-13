@@ -56,7 +56,7 @@ For a new feature or a behavior change, create a change (`openspec new change "<
 
 ## Scope
 
-MdExplorer is a focused, read-only Markdown viewer. Before proposing a feature, check it against the principles in [docs/PRODUCT.md](docs/PRODUCT.md): features that help reading and presenting are welcome, while editing, sync, publishing and plugins are out of scope.
+MdExplorer is a focused, read-only Markdown viewer. Before proposing a feature, check it against the "Why MdExplorer" section of the [README](README.md): features that help reading and presenting are welcome, while editing, sync, publishing and plugins are out of scope.
 
 ## Code guidelines
 
