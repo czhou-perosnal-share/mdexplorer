@@ -23,6 +23,25 @@ Open a huge docs folder instantly, search it without freezing, and read in a the
 
 ---
 
+## 🎯 Why MdExplorer
+
+There are quite a few projects on GitHub called "mdexplorer". This one has a deliberately narrow goal:
+
+> **Open a folder, read its Markdown files. That's it.**
+
+I wanted a tool to *view* the Markdown files under a folder: easy to use, light, and focused on reading and presenting. Most Markdown apps are editors or note-taking systems, and they bring a lot I don't need when I only want to read.
+
+**What it focuses on**
+- 📖 **Reading and presenting.** Clean rendering, comfortable themes, tabs and quick navigation between linked documents.
+- 🪶 **Light and simple.** One window: a folder tree, a search box, and your documents. No accounts, no database, no setup.
+- 🚀 **Fast on big folders.** Folders load only when you open them and search runs in the background, so large documentation trees stay responsive.
+
+**What it deliberately does not do**
+- ✋ No editing. MdExplorer is read-only and never modifies your files.
+- ✋ No note-taking, syncing, publishing, plugins or cloud features.
+
+If you want to write Markdown, use your favorite editor and keep MdExplorer open next to it as the reader.
+
 ## ✨ Features
 
 | | |
