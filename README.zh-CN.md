@@ -4,8 +4,11 @@
 
 # MdExplorer
 
-**一款快速、类 VS Code 风格的 Markdown 文件夹桌面浏览器。**
-秒开超大文档目录，搜索时界面不卡顿，用你喜欢的主题舒适阅读。
+### 阅读你的 Markdown 文件夹。美观、安全、没有杂音。
+
+一款快速、类 VS Code 风格的查看器，直接阅读躺在文件夹里的文档。无需编辑器，无需配置，文件零风险。
+
+⚡ 大文件夹也很快 &nbsp;·&nbsp; 🔎 后台搜索 &nbsp;·&nbsp; 🔗 智能链接 &nbsp;·&nbsp; 🎨 9 种主题 &nbsp;·&nbsp; 🔒 只读
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Electron](https://img.shields.io/badge/Electron-43-47848F?logo=electron&logoColor=white)
@@ -22,6 +25,17 @@
 </p>
 
 ---
+
+## ⚡ 一分钟上手
+
+```bash
+git clone git@github.com:czhou-perosnal-share/mdexplorer.git
+cd mdexplorer
+npm install
+npm start
+```
+
+然后按 `Ctrl+O`，选择任意包含 Markdown 文件的文件夹即可。想要正式的安装包？见[构建与安装](#构建与安装)。
 
 ## 🎯 为什么选择 MdExplorer
 

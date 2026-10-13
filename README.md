@@ -4,8 +4,11 @@
 
 # MdExplorer
 
-**A fast, VS Code-style desktop browser for Markdown folders.**
-Open a huge docs folder instantly, search it without freezing, and read in a theme you like.
+### Read your Markdown folders. Beautifully. Safely. Without the clutter.
+
+A fast, VS Code-style viewer for the docs already sitting in your folders. No editor, no setup, no risk to your files.
+
+⚡ Fast on huge folders &nbsp;·&nbsp; 🔎 Background search &nbsp;·&nbsp; 🔗 Smart links &nbsp;·&nbsp; 🎨 9 themes &nbsp;·&nbsp; 🔒 Read-only
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![Electron](https://img.shields.io/badge/Electron-43-47848F?logo=electron&logoColor=white)
@@ -22,6 +25,17 @@ Open a huge docs folder instantly, search it without freezing, and read in a the
 </p>
 
 ---
+
+## ⚡ Try it in a minute
+
+```bash
+git clone git@github.com:czhou-perosnal-share/mdexplorer.git
+cd mdexplorer
+npm install
+npm start
+```
+
+Then press `Ctrl+O` and pick any folder with Markdown files. Want a real installer instead? See [Build and install](#build-and-install).
 
 ## 🎯 Why MdExplorer
 
