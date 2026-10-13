@@ -60,7 +60,7 @@ For a new feature or a behavior change, create a change (`openspec new change "<
 - **Keep the renderer sandboxed.** The renderer must not use Node APIs. Add new file-system or OS access as an IPC handler in `src/main/index.ts` and expose it in `src/preload/index.ts` (and its `ElectronAPI` type).
 - **Never block the main process.** Use `fs.promises` and `await` instead of `*Sync` calls, and stream results for long work.
 - **Themes.** UI colors come from the CSS tokens in `src/renderer/index.css` (for example `--color-neutral-700`, `--color-accent`). Do not hard-code colors, so all four interface themes keep working. Document themes live in `src/renderer/themes/` and must not be imported statically in `index.tsx`.
-- **Dependencies.** Do not upgrade `electron-store` (v8) or `@vitejs/plugin-react` (v4) to ESM-only majors. See [pinned versions](docs/TECH.md#pinned-versions).
+- **Dependencies.** Use `~` ranges (patch updates only, for example `~19.2.7`) because the lockfile is not committed; `electron` is pinned exactly. Do not upgrade `electron-store` (v8) or `@vitejs/plugin-react` (v4) to ESM-only majors. See [pinned versions](docs/TECH.md#pinned-versions).
 - **Tests.** Put unit tests in `src/tests/`. Pure logic (path handling, tab logic, Markdown rendering) should be covered.
 
 ## Reporting bugs and ideas
