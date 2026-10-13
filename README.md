@@ -1,57 +1,112 @@
+<div align="center">
+
+<img src="assets/icon.png" alt="MdExplorer" width="96" height="96" />
+
 # MdExplorer
 
-A fast, lightweight GUI Markdown file browser built with Electron + React + TypeScript.
+**A fast, VS Code-style desktop browser for Markdown folders.**
+Open a huge docs folder instantly, search it without freezing, and read in a theme you like.
 
-## Features
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Electron](https://img.shields.io/badge/Electron-43-47848F?logo=electron&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
-- **Folder tree** — browse any folder; shows only `.md` files grouped by directory
-- **Styled Markdown rendering** — headings, code blocks with syntax highlighting, tables, blockquotes
-- **Multi-tab viewer** — open multiple files simultaneously; switch with `Ctrl+Tab`
-- **Session persistence** — remembers last folder, open tabs, and scroll positions
-- **Themes** — GitHub, Nord, Dracula, Plain (switch via View menu or toolbar)
+**English** · [简体中文](README.zh-CN.md)
 
-## Install
+</div>
 
-Download the latest release for your OS from the Releases page:
-- Windows: `MdExplorer-Setup.exe`
-- macOS: `MdExplorer.dmg`
-- Linux: `MdExplorer.AppImage`
+---
 
-## Development
+## ✨ Features
+
+| | |
+|---|---|
+| ⚡ **Instant open, lazy tree** | Only one folder level is read at a time, when you expand it. Huge folders never freeze the UI. |
+| 🔎 **Background search** | Search Markdown file names, or file contents too. Results stream in, you can stop it any time, and you keep working while it runs. |
+| 🗂️ **VS Code-style sidebar** | Activity bar with Explorer, Search and Settings. Click the active icon to collapse the sidebar. |
+| 📑 **Multi-tab reading** | Many documents at once, tab context menu, and a quick tab switcher (`Ctrl+Shift+E`). |
+| 🔗 **Smart links** | Links to other `.md` files open in a tab (never twice for the same file) without touching the tree. External links open in your browser. |
+| 🎨 **Two kinds of themes** | Interface: Nocturne, Light, Graphite, High contrast. Document: Nocturne, GitHub, Nord, Dracula, Plain. |
+| 🧠 **Remembers your session** | Last folder, open tabs, active tab, scroll positions, window size and themes. You are asked before the previous folder is reopened. |
+| 🖥️ **Multi-monitor safe** | If the window was last on a monitor you disconnected, it reopens on your primary display. |
+| 📝 **Rich Markdown** | Syntax-highlighted code, tables, blockquotes, GitHub-flavored Markdown and a YAML front-matter table. Embedded scripts are stripped. |
+
+## 🚀 Getting started
+
+### Install
+
+Build the installer for your platform (see [Development](#-development)):
+
+| Platform | Output of `npm run make` |
+|---|---|
+| Windows | `out/make/squirrel.windows/x64/MdExplorer-<version> Setup.exe` |
+| macOS | `out/make/zip/darwin/…` (ZIP) |
+| Linux | `out/make/deb/…` and `out/make/rpm/…` |
+
+### Open a folder
+
+- Use **File → Open Folder…** (`Ctrl+O`) or the **Open Folder** button, or
+- start the app with a folder argument:
 
 ```bash
-npm install
-npm start          # start in development mode
-npm run make       # build installable package
+mdexplorer /path/to/docs
 ```
 
-## Keyboard Shortcuts
+## ⌨️ Keyboard shortcuts
 
 | Shortcut | Action |
 |---|---|
 | `Ctrl+O` | Open folder |
+| `Ctrl+,` | Settings |
+| `Ctrl+Shift+F` | Search files |
+| `Ctrl+Shift+E` | Tab switcher |
+| `Ctrl+Tab` / `Ctrl+Shift+Tab` | Next / previous tab |
 | `Ctrl+W` | Close active tab |
-| `Ctrl+Tab` | Next tab |
-| `Ctrl+Shift+Tab` | Previous tab |
-| `↑` / `k` | Scroll / navigate up |
-| `↓` / `j` | Scroll / navigate down |
-| `PgUp` / `PgDn` | Page scroll |
-| `Home` / `End` | Document start / end |
+| `F5` | Refresh the folder tree |
+| `↑` `↓` / `k` `j` | Navigate the tree, or scroll the document |
+| `←` `→` | Collapse / expand the selected folder |
+| `PgUp` `PgDn` · `Home` `End` | Page scroll · document start / end |
 | `Enter` | Open file / toggle folder |
-| `?` | Show keyboard shortcuts |
+| `?` | Show the shortcut list |
 | `Ctrl+Q` | Quit |
 
-## CLI Usage
+## 🛠️ Development
+
+Requirements: a recent Node.js (developed on v24) and npm.
 
 ```bash
-# Open a specific folder at launch
-mdexplorer /path/to/docs
+npm install
+npm start          # run in development mode
+npm test           # unit tests (Vitest)
+npm run make       # build an installable package into out/make
 ```
 
-## Session State Location
+**Tech stack:** Electron + [Electron Forge](https://www.electronforge.io/) (Vite plugin), React 19, TypeScript, `marked`, `highlight.js`, `electron-store`.
+
+```
+src/
+├── main/       # Electron main process: file listing, search, link resolution, state store
+├── preload/    # Safe IPC bridge exposed to the renderer
+└── renderer/   # React UI: sidebar, tree, search, tabs, viewer, themes
+openspec/       # Specs and change history (OpenSpec)
+```
+
+> **Dependency note:** `electron-store@8`, `@vitejs/plugin-react@4` are pinned on purpose — newer majors are ESM-only and break the Vite CommonJS main-process build.
+
+## 💾 Where settings are stored
 
 | Platform | Path |
 |---|---|
 | Windows | `%APPDATA%\mdexplorer\config.json` |
 | macOS | `~/Library/Application Support/mdexplorer/config.json` |
 | Linux | `~/.config/mdexplorer/config.json` |
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome. Please branch from `main`, keep changes focused, and open a PR against `main`. Behavior changes are tracked as OpenSpec changes under [`openspec/`](openspec/).
+
+## 📄 License
+
+[MIT](LICENSE) © 2026 czhou-perosnal-share
