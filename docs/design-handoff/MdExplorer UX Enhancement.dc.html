@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nocturne-c2ffc70d-3b5a-4c22-9c58-652d833b1c7e/styles.css">
+  <script src="_ds/nocturne-c2ffc70d-3b5a-4c22-9c58-652d833b1c7e/_ds_bundle.js"></script>
+  <style>
+    body { margin: 0; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; background:var(--color-bg); padding:40px 24px 80px; display:flex; flex-direction:column; align-items:center; gap:28px; font-family:var(--font-body);">
+
+  <div style="width:100%; max-width:1400px; display:flex; align-items:baseline; justify-content:space-between; gap:16px;">
+    <div>
+      <div style="font-family:var(--font-heading); font-size:22px; font-weight:500; color:var(--color-text);">MdExplorer — UI/UX Review</div>
+      <div style="font-size:13px; color:var(--color-neutral-300); margin-top:4px;">Left: today's shipped UI, recreated pixel-for-pixel. Right: a UX pass on the same screen and data.</div>
+    </div>
+    <div class="seg">
+      <label class="seg-opt">
+        <input type="radio" name="view" checked="{{ isCurrent }}" onChange="{{ showCurrent }}">
+        <span>Current UI</span>
+      </label>
+      <label class="seg-opt">
+        <input type="radio" name="view" checked="{{ isEnhanced }}" onChange="{{ showEnhanced }}">
+        <span>Enhanced UX</span>
+      </label>
+    </div>
+  </div>
+
+  <sc-if value="{{ isCurrent }}" hint-placeholder-val="{{ false }}">
+  <div style="width:100%; max-width:1400px;">
+    <div style="font-size:12px; color:var(--color-neutral-400); margin-bottom:8px; letter-spacing:.02em; text-transform:uppercase;">Current — as shipped (GitHub theme)</div>
+    <div style="{{ currentVarsStyle }}; width:1400px; height:900px; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-lg); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; font-size:14px; background:var(--panel-bg); color:var(--md-text);">
+
+      <div style="display:flex; align-items:center; gap:8px; padding:6px 12px; background:var(--toolbar-bg); border-bottom:1px solid var(--toolbar-border); color:var(--toolbar-text); flex-shrink:0;">
+        <button style="padding:4px 10px; border:1px solid var(--toolbar-border); border-radius:4px; background:var(--tab-active-bg); color:var(--toolbar-text); cursor:pointer; font-size:13px; white-space:nowrap; flex-shrink:0;" style-hover="opacity:0.85;">Open Folder</button>
+        <span style="flex:1; font-size:12px; color:var(--statusbar-text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">/Users/dev/projects/mdexplorer-docs</span>
+        <button onClick="{{ toggleSwitcher }}" style="display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border:1px solid var(--toolbar-border); border-radius:4px; background:var(--tab-active-bg); color:var(--toolbar-text); cursor:pointer; font-size:13px;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v2H1V3zm0 4h10v2H1V7zm0 4h14v2H1v-2z"></path></svg>
+          Tabs
+        </button>
+        <select value="{{ currentTheme }}" onChange="{{ setTheme }}" style="padding:3px 6px; border:1px solid var(--toolbar-border); border-radius:4px; background:var(--tab-active-bg); color:var(--toolbar-text); font-size:13px;">
+          <option value="github">Github</option>
+          <option value="nord">Nord</option>
+          <option value="dracula">Dracula</option>
+          <option value="plain">Plain</option>
+        </select>
+      </div>
+
+      <div style="flex:1; overflow:hidden; display:flex;">
+        <div style="width:300px; flex-shrink:0; background:var(--sidebar-bg); border-right:1px solid var(--toolbar-border); display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; padding:4px 8px; border-bottom:1px solid var(--toolbar-border); background:var(--sidebar-bg); flex-shrink:0;">
+            <button onClick="{{ toggleTreeMode }}" style="{{ treeToggleStyle }} white-space:nowrap; flex-shrink:0;">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2h14v2L9 10v4l-2-1V10L1 4V2z"></path></svg>
+              MD Only
+            </button>
+          </div>
+          <div style="flex:1; overflow-y:auto; padding:4px 0;">
+            <sc-for list="{{ treeItems }}" as="item" hint-placeholder-count="5">
+              <div style="{{ item.style }}" style-hover="background:var(--sidebar-hover);" onClick="{{ item.onClick }}" title="{{ item.path }}">{{ item.label }}</div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="width:4px; flex-shrink:0; background:var(--resize-handle); cursor:col-resize;"></div>
+
+        <div style="flex:1; display:flex; flex-direction:column; background:var(--panel-bg); overflow:hidden;">
+          <div style="display:flex; flex-direction:row; overflow-x:auto; background:var(--tab-bg); border-bottom:1px solid var(--tab-border); flex-shrink:0;">
+            <sc-for list="{{ tabObjs }}" as="tab" hint-placeholder-count="2">
+              <div style="{{ tab.style }}" onClick="{{ tab.onClick }}" title="{{ tab.path }}">
+                <span>{{ tab.label }}</span>
+                <button onClick="{{ tab.onClose }}" style="background:none; border:none; cursor:pointer; font-size:14px; color:inherit; line-height:1; padding:0 2px; border-radius:2px;" style-hover="background:var(--md-code-bg);">×</button>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1; overflow-y:auto; padding:24px 32px; background:var(--md-bg); color:var(--md-text);">
+              <h1 style="font-size:2em; margin:0 0 0.5em; padding-bottom:0.3em; border-bottom:1px solid var(--md-heading-border); color:var(--md-heading-color); line-height:1.25;">{{ doc.title }}</h1>
+              <sc-if value="{{ docHasIntro }}" hint-placeholder-val="{{ false }}">
+                <p style="margin-bottom:1em; line-height:1.6;">{{ doc.intro }}</p>
+              </sc-if>
+              <sc-if value="{{ docHasBullets }}" hint-placeholder-val="{{ false }}">
+                <ul style="padding-left:2em; margin-bottom:1em;">
+                  <sc-for list="{{ doc.bullets }}" as="b" hint-placeholder-count="3">
+                    <li style="margin-bottom:0.25em; line-height:1.6;">{{ b }}</li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+              <sc-if value="{{ docHasQuote }}" hint-placeholder-val="{{ false }}">
+                <blockquote style="border-left:4px solid var(--md-blockquote-border); color:var(--md-blockquote-text); padding:0 1em; margin:0 0 1em;">{{ doc.quote }}</blockquote>
+              </sc-if>
+              <sc-if value="{{ docHasCode }}" hint-placeholder-val="{{ false }}">
+                <pre style="background:var(--md-code-bg); border:1px solid var(--md-code-border); border-radius:4px; padding:16px; overflow-x:auto; margin-bottom:1em;"><code style="font-size:13px; font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace; color:var(--md-code-text);">{{ doc.code.text }}</code></pre>
+              </sc-if>
+              <sc-if value="{{ docHasTable }}" hint-placeholder-val="{{ false }}">
+                <table style="border-collapse:collapse; margin-bottom:1em; width:100%;">
+                  <thead><tr>
+                    <sc-for list="{{ doc.table.headers }}" as="h" hint-placeholder-count="2">
+                      <th style="border:1px solid var(--md-table-border); padding:6px 13px; text-align:left;">{{ h }}</th>
+                    </sc-for>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ doc.table.rows }}" as="row" hint-placeholder-count="3">
+                      <tr style="{{ row.style }}">
+                        <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="2">
+                          <td style="border:1px solid var(--md-table-border); padding:6px 13px;">{{ cell }}</td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noDoc }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1; display:flex; align-items:center; justify-content:center; color:var(--statusbar-text); font-style:italic;">No file open — select a file from the tree</div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:3px 12px; background:var(--statusbar-bg); border-top:1px solid var(--statusbar-border); color:var(--statusbar-text); font-size:12px; flex-shrink:0;">
+        <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ activeTab }}</span>
+        </sc-if>
+        <sc-if value="{{ noDoc }}" hint-placeholder-val="{{ false }}">
+          <span style="font-style:italic;">Press ? for keyboard shortcuts</span>
+        </sc-if>
+        <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+          <span style="flex-shrink:0; margin-left:16px;">{{ doc.lines }} lines</span>
+        </sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ switcherOpen }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ toggleSwitcher }}" style="position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:600; display:flex; align-items:flex-start; justify-content:center; padding-top:80px;">
+        <div onClick="{{ stopProp }}" style="background:var(--panel-bg); border:1px solid var(--toolbar-border); border-radius:8px; box-shadow:0 8px 32px rgba(0,0,0,0.2); width:480px; overflow:hidden;">
+          <input placeholder="Filter open tabs..." style="width:100%; padding:12px 16px; border:none; border-bottom:1px solid var(--toolbar-border); background:var(--panel-bg); color:var(--md-text); font-size:14px; outline:none; box-sizing:border-box;">
+          <div style="max-height:320px; overflow-y:auto;">
+            <sc-for list="{{ tabObjs }}" as="tab" hint-placeholder-count="2">
+              <div onClick="{{ tab.onActivateAndClose }}" style="padding:8px 16px; cursor:pointer; font-size:13px; color:var(--md-text); font-family:monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" style-hover="background:var(--sidebar-hover);">{{ tab.path }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isEnhanced }}" hint-placeholder-val="{{ true }}">
+  <div style="width:100%; max-width:1400px;">
+    <div style="font-size:12px; color:var(--color-neutral-400); margin-bottom:8px; letter-spacing:.02em; text-transform:uppercase;">Enhanced — Nocturne</div>
+    <div style="width:1400px; height:900px; display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-lg); border-radius:var(--radius-md); background:var(--color-bg); color:var(--color-text); border:1px solid var(--color-neutral-800);">
+
+      <div class="nav" style="flex-shrink:0;">
+        <div class="nav-brand">MdExplorer</div>
+        <button class="btn btn-secondary" style="white-space:nowrap; flex-shrink:0;">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1.5 3.5h4l1.5 2h7v7h-12.5z"></path></svg>
+          Open Folder
+        </button>
+        <div style="flex:1; display:flex; align-items:center; gap:6px; font-size:12px; color:var(--color-neutral-400); overflow:hidden;">
+          <sc-for list="{{ crumbs }}" as="crumb" hint-placeholder-count="3">
+            <span style="{{ crumb.style }}">{{ crumb.name }}</span>
+            <sc-if value="{{ crumb.hasSep }}" hint-placeholder-val="{{ true }}"><span style="color:var(--color-neutral-600);">/</span></sc-if>
+          </sc-for>
+        </div>
+        <select class="input" value="{{ contentTheme }}" onChange="{{ setContentTheme }}" title="Viewer theme — affects the document only" style="font-size:12px; padding:3px 8px; width:auto; white-space:nowrap; flex-shrink:0;">
+          <option value="nocturne">Nocturne</option>
+          <option value="github">Github</option>
+          <option value="nord">Nord</option>
+          <option value="dracula">Dracula</option>
+          <option value="plain">Plain</option>
+        </select>
+        <button class="btn btn-icon" onClick="{{ toggleSwitcher }}" title="Tab switcher">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h14v2H1V3zm0 4h10v2H1V7zm0 4h14v2H1v-2z"></path></svg>
+        </button>
+      </div>
+
+      <div style="flex:1; overflow:hidden; display:flex;">
+        <div style="{{ sidebarStyle }}">
+          <sc-if value="{{ showSearchBox }}" hint-placeholder-val="{{ true }}">
+            <div style="padding:10px 12px; border-bottom:1px solid var(--color-neutral-800);">
+              <div class="field" style="margin:0;">
+                <input class="input" value="{{ search }}" onChange="{{ setSearch }}" placeholder="Filter files...">
+              </div>
+            </div>
+          </sc-if>
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; border-bottom:1px solid var(--color-neutral-800);">
+            <span style="font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--color-neutral-400);">Files</span>
+            <button class="btn btn-ghost" onClick="{{ toggleTreeMode }}" style="padding:2px 8px; font-size:11px; white-space:nowrap; flex-shrink:0;">{{ treeModeLabel }}</button>
+          </div>
+
+          <sc-if value="{{ searchActive }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1; overflow-y:auto; padding:6px 0;">
+              <sc-for list="{{ searchResults }}" as="r" hint-placeholder-count="3">
+                <div style="{{ r.style }}" onClick="{{ r.onClick }}" style-hover="background:var(--color-neutral-800);">
+                  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" style="flex-shrink:0;"><path d="M3 1.5h6l3 3v10h-9z"></path><path d="M9 1.5v3h3"></path></svg>
+                  {{ r.name }}
+                </div>
+              </sc-for>
+              <sc-if value="{{ searchEmpty }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:16px; text-align:center; color:var(--color-neutral-500); font-size:12px;">No files match "{{ search }}"</div>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ notSearchActive }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1; overflow-y:auto; padding:6px 0;">
+              <sc-for list="{{ treeItems }}" as="item" hint-placeholder-count="5">
+                <div style="{{ item.styleE }}" onClick="{{ item.onClick }}" style-hover="background:var(--color-neutral-800);" title="{{ item.path }}">
+                  <sc-if value="{{ item.isDir }}" hint-placeholder-val="{{ false }}">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" style="flex-shrink:0;"><path d="M1.5 3.5h4l1.5 2h7v7h-12.5z"></path></svg>
+                  </sc-if>
+                  <sc-if value="{{ item.isFile }}" hint-placeholder-val="{{ true }}">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" style="flex-shrink:0;"><path d="M3 1.5h6l3 3v10h-9z"></path><path d="M9 1.5v3h3"></path></svg>
+                  </sc-if>
+                  <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ item.name }}</span>
+                  <sc-if value="{{ item.isNonMd }}" hint-placeholder-val="{{ false }}">
+                    <span class="tag tag-neutral" style="margin-left:auto; font-size:10px; padding:1px 5px;">bin</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+          <div style="display:flex; flex-direction:row; overflow-x:auto; background:var(--color-bg); border-bottom:1px solid var(--color-neutral-800); flex-shrink:0; padding:0 8px;">
+            <sc-for list="{{ tabObjs }}" as="tab" hint-placeholder-count="2">
+              <div style="{{ tab.styleE }}" onClick="{{ tab.onClick }}" title="{{ tab.path }}">
+                <span>{{ tab.label }}</span>
+                <button onClick="{{ tab.onClose }}" style="background:none; border:none; cursor:pointer; color:inherit; opacity:0.6; line-height:1; padding:0 2px; font-size:14px;" style-hover="opacity:1;">×</button>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+            <div style="{{ contentVarsStyle }} flex:1; overflow-y:auto; padding:32px 40px; color:var(--md-text); background:var(--md-bg);">
+              <h1 style="font-family:var(--font-heading); font-size:30px; font-weight:500; margin:0 0 20px; color:var(--md-heading-color); border-bottom:1px solid var(--md-heading-border); padding-bottom:0.2em;">{{ doc.title }}</h1>
+              <sc-if value="{{ docHasIntro }}" hint-placeholder-val="{{ false }}">
+                <p style="margin-bottom:1.1em; line-height:1.7; color:var(--md-text); font-size:15px; max-width:640px;">{{ doc.intro }}</p>
+              </sc-if>
+              <sc-if value="{{ docHasBullets }}" hint-placeholder-val="{{ false }}">
+                <ul style="padding-left:1.4em; margin-bottom:1.1em; max-width:640px;">
+                  <sc-for list="{{ doc.bullets }}" as="b" hint-placeholder-count="3">
+                    <li style="margin-bottom:0.4em; line-height:1.7; color:var(--md-text); font-size:15px;">{{ b }}</li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+              <sc-if value="{{ docHasQuote }}" hint-placeholder-val="{{ false }}">
+                <blockquote style="border-left:3px solid var(--md-blockquote-border); color:var(--md-blockquote-text); padding:2px 0 2px 16px; margin:0 0 1.1em; font-style:italic; max-width:640px;">{{ doc.quote }}</blockquote>
+              </sc-if>
+              <sc-if value="{{ docHasCode }}" hint-placeholder-val="{{ false }}">
+                <pre style="background:var(--md-code-bg); border:1px solid var(--md-code-border); border-radius:var(--radius-sm); padding:16px; overflow-x:auto; margin-bottom:1.1em; max-width:640px;"><code style="font-size:13px; font-family:'SFMono-Regular',Consolas,Menlo,monospace; color:var(--md-code-text);">{{ doc.code.text }}</code></pre>
+              </sc-if>
+              <sc-if value="{{ docHasTable }}" hint-placeholder-val="{{ false }}">
+                <table class="table" style="max-width:720px;">
+                  <thead><tr>
+                    <sc-for list="{{ doc.table.headers }}" as="h" hint-placeholder-count="2">
+                      <th>{{ h }}</th>
+                    </sc-for>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ doc.table.rows }}" as="row" hint-placeholder-count="3">
+                      <tr>
+                        <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="2">
+                          <td>{{ cell }}</td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noDoc }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ contentVarsStyle }} flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--color-neutral-400); background:var(--md-bg);">
+              <svg width="28" height="28" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 1.5h6l3 3v10h-9z"></path><path d="M9 1.5v3h3"></path></svg>
+              <span style="font-size:13px;">No file open — select one from the tree</span>
+              <span style="font-size:12px; color:var(--color-neutral-500);">Press <span class="tag tag-outline" style="padding:1px 6px;">?</span> for keyboard shortcuts</span>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:5px 14px; border-top:1px solid var(--color-neutral-800); font-size:11px; color:var(--color-neutral-400); flex-shrink:0;">
+        <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ activeTab }}</span>
+        </sc-if>
+        <sc-if value="{{ noDoc }}" hint-placeholder-val="{{ false }}">
+          <span>Press ? for keyboard shortcuts</span>
+        </sc-if>
+        <div style="display:flex; gap:6px; flex-shrink:0;">
+          <sc-if value="{{ hasDoc }}" hint-placeholder-val="{{ true }}">
+            <span class="tag tag-neutral" style="font-size:10px; padding:1px 6px;">{{ doc.lines }} lines</span>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ switcherOpen }}" hint-placeholder-val="{{ false }}">
+      <div class="dialog-backdrop" onClick="{{ toggleSwitcher }}">
+        <div class="dialog" onClick="{{ stopProp }}" style="width:480px; padding:0; overflow:hidden;">
+          <div class="field" style="margin:0;">
+            <input class="input" placeholder="Filter open tabs..." style="border:none; border-radius:0; border-bottom:1px solid var(--color-neutral-800);">
+          </div>
+          <div style="max-height:320px; overflow-y:auto; padding:6px 0;">
+            <sc-for list="{{ tabObjs }}" as="tab" hint-placeholder-count="2">
+              <div onClick="{{ tab.onActivateAndClose }}" style="padding:8px 20px; cursor:pointer; font-size:13px; color:var(--color-text); font-family:monospace; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" style-hover="background:var(--color-neutral-800);">{{ tab.path }}</div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: {&quot;width&quot;: 1450, &quot;height&quot;: 1000},
+  &quot;initialView&quot;: {&quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;enhanced&quot;, &quot;options&quot;: [&quot;current&quot;, &quot;enhanced&quot;], &quot;tsType&quot;: &quot;string&quot;},
+  &quot;denseSidebar&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: false, &quot;tsType&quot;: &quot;boolean&quot;},
+  &quot;showSearch&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  state = {
+    view: (this.props && this.props.initialView) || 'enhanced',
+    expanded: { docs: true, src: false },
+    tabs: ['docs/guide.md', 'README.md'],
+    activeTab: 'docs/guide.md',
+    treeMode: 'md-only',
+    currentTheme: 'github',
+    contentTheme: 'nocturne',
+    search: '',
+    switcherOpen: false,
+  };
+
+  tree = [
+    { type: 'dir', name: 'docs', path: 'docs', children: [
+      { type: 'file', name: 'guide.md', path: 'docs/guide.md' },
+      { type: 'file', name: 'api.md', path: 'docs/api.md' },
+    ]},
+    { type: 'dir', name: 'src', path: 'src', children: [
+      { type: 'file', name: 'index.ts', path: 'src/index.ts' },
+      { type: 'file', name: 'preload.ts', path: 'src/preload.ts' },
+    ]},
+    { type: 'file', name: 'README.md', path: 'README.md' },
+    { type: 'file', name: 'CHANGELOG.md', path: 'CHANGELOG.md' },
+    { type: 'file', name: 'CONTRIBUTING.md', path: 'CONTRIBUTING.md' },
+  ];
+
+  docs = {
+    'docs/guide.md': {
+      title: 'Getting Started',
+      intro: 'Point MdExplorer at any folder and it surfaces every Markdown file inside, grouped the way your filesystem already is.',
+      bullets: [
+        'Install the app for your OS from the Releases page',
+        'Launch it and choose a folder, or pass one on the command line',
+        'Use the tree on the left to open files into tabs',
+      ],
+      quote: 'Session state — last folder, open tabs, scroll position — persists automatically between launches.',
+      code: { text: 'mdexplorer /path/to/docs' },
+      lines: 42,
+    },
+    'docs/api.md': {
+      title: 'API Reference',
+      intro: 'The renderer talks to the main process through a small preload bridge.',
+      table: { headers: ['Method', 'Description'], rows: [
+        ['scanFolder(path, mode)', 'Walks a directory and returns the file tree'],
+        ['readFile(path)', 'Reads a file\u2019s contents with a line-count cap'],
+        ['openFolderDialog()', 'Shows the native folder picker'],
+      ]},
+      code: { text: 'const tree = await window.api.scanFolder(path, "md-only");' },
+      lines: 58,
+    },
+    'README.md': {
+      title: 'MdExplorer',
+      intro: 'A fast, lightweight GUI Markdown file browser built with Electron, React and TypeScript.',
+      bullets: [
+        'Folder tree scoped to Markdown files',
+        'Styled rendering \u2014 headings, code, tables, blockquotes',
+        'Multi-tab viewer with session persistence',
+        'Four built-in themes',
+      ],
+      code: { text: 'npm install\nnpm start' },
+      lines: 36,
+    },
+    'CHANGELOG.md': {
+      title: 'Changelog',
+      bullets: [
+        '0.4.0 \u2014 Added the tab switcher and keyboard shortcut overlay',
+        '0.3.0 \u2014 Session persistence for scroll position',
+        '0.2.0 \u2014 Theme switching (Nord, Dracula, Plain)',
+        '0.1.0 \u2014 Initial release',
+      ],
+      lines: 18,
+    },
+    'CONTRIBUTING.md': {
+      title: 'Contributing',
+      intro: 'Issues and pull requests are welcome.',
+      quote: 'Run the test suite before opening a PR \u2014 npm test covers session storage, tab logic and markdown rendering.',
+      lines: 24,
+    },
+  };
+
+  themes = {
+    github: { bg:'#ffffff', text:'#24292e', heading:'#24292e', headingBorder:'#eaecef', codeBg:'#f6f8fa', codeText:'#24292e', codeBorder:'#e1e4e8', link:'#0366d6', quoteBorder:'#dfe2e5', quoteText:'#6a737d', tableBorder:'#dfe2e5', tableAlt:'#f6f8fa', toolbarBg:'#f6f8fa', toolbarText:'#24292e', toolbarBorder:'#e1e4e8', sidebarBg:'#fafbfc', sidebarHover:'#f3f4f6', sidebarSelected:'#e8f0fe', sidebarSelectedText:'#0366d6', sidebarText:'#24292e', statusBg:'#f6f8fa', statusText:'#586069', statusBorder:'#e1e4e8', tabBg:'#f6f8fa', tabActiveBg:'#ffffff', tabText:'#586069', tabActiveText:'#24292e', tabBorder:'#e1e4e8', truncBg:'#fff3cd', truncText:'#856404', truncBorder:'#ffc107', panelBg:'#ffffff', resize:'#e1e4e8' },
+    nord: { bg:'#2e3440', text:'#d8dee9', heading:'#eceff4', headingBorder:'#4c566a', codeBg:'#3b4252', codeText:'#d8dee9', codeBorder:'#4c566a', link:'#88c0d0', quoteBorder:'#5e81ac', quoteText:'#a8b2c6', tableBorder:'#4c566a', tableAlt:'#3b4252', toolbarBg:'#3b4252', toolbarText:'#eceff4', toolbarBorder:'#4c566a', sidebarBg:'#2e3440', sidebarHover:'#3b4252', sidebarSelected:'#4c566a', sidebarSelectedText:'#88c0d0', sidebarText:'#d8dee9', statusBg:'#3b4252', statusText:'#a8b2c6', statusBorder:'#4c566a', tabBg:'#3b4252', tabActiveBg:'#2e3440', tabText:'#a8b2c6', tabActiveText:'#eceff4', tabBorder:'#4c566a', truncBg:'#4c566a', truncText:'#ebcb8b', truncBorder:'#ebcb8b', panelBg:'#2e3440', resize:'#4c566a' },
+    dracula: { bg:'#282a36', text:'#f8f8f2', heading:'#f8f8f2', headingBorder:'#44475a', codeBg:'#44475a', codeText:'#f8f8f2', codeBorder:'#6272a4', link:'#8be9fd', quoteBorder:'#6272a4', quoteText:'#b8bfe8', tableBorder:'#44475a', tableAlt:'#44475a', toolbarBg:'#44475a', toolbarText:'#f8f8f2', toolbarBorder:'#6272a4', sidebarBg:'#21222c', sidebarHover:'#44475a', sidebarSelected:'#44475a', sidebarSelectedText:'#bd93f9', sidebarText:'#f8f8f2', statusBg:'#44475a', statusText:'#b8bfe8', statusBorder:'#6272a4', tabBg:'#44475a', tabActiveBg:'#282a36', tabText:'#b8bfe8', tabActiveText:'#f8f8f2', tabBorder:'#6272a4', truncBg:'#44475a', truncText:'#f1fa8c', truncBorder:'#f1fa8c', panelBg:'#282a36', resize:'#44475a' },
+    plain: { bg:'#ffffff', text:'#000000', heading:'#000000', headingBorder:'#cccccc', codeBg:'#f5f5f5', codeText:'#333333', codeBorder:'#cccccc', link:'#0000ee', quoteBorder:'#aaaaaa', quoteText:'#555555', tableBorder:'#cccccc', tableAlt:'#f9f9f9', toolbarBg:'#f0f0f0', toolbarText:'#000000', toolbarBorder:'#cccccc', sidebarBg:'#f9f9f9', sidebarHover:'#eeeeee', sidebarSelected:'#e0e0e0', sidebarSelectedText:'#000000', sidebarText:'#000000', statusBg:'#f0f0f0', statusText:'#555555', statusBorder:'#cccccc', tabBg:'#f0f0f0', tabActiveBg:'#ffffff', tabText:'#555555', tabActiveText:'#000000', tabBorder:'#cccccc', truncBg:'#fffbe6', truncText:'#7a5000', truncBorder:'#d4a017', panelBg:'#ffffff', resize:'#cccccc' },
+  };
+
+  contentThemes = {
+    nocturne: { bg:'transparent', text:'var(--color-neutral-200)', heading:'var(--color-text)', headingBorder:'var(--color-neutral-700)', codeBg:'var(--color-neutral-800)', codeText:'var(--color-neutral-100)', codeBorder:'var(--color-neutral-700)', link:'var(--color-accent-300)', quoteBorder:'var(--color-neutral-600)', quoteText:'var(--color-neutral-300)', tableBorder:'var(--color-neutral-700)', tableAlt:'var(--color-neutral-800)', truncBg:'var(--color-neutral-800)', truncText:'var(--color-neutral-200)', truncBorder:'var(--color-neutral-700)' },
+  };
+
+  showCurrent = () => this.setState({ view: 'current' });
+  setContentTheme = (e) => this.setState({ contentTheme: e.target.value });
+  showEnhanced = () => this.setState({ view: 'enhanced' });
+  toggleDir = (path) => this.setState(s => ({ expanded: { ...s.expanded, [path]: !s.expanded[path] } }));
+  openFile = (path) => this.setState(s => ({ tabs: s.tabs.includes(path) ? s.tabs : [...s.tabs, path], activeTab: path }));
+  closeTab = (path) => this.setState(s => {
+    const tabs = s.tabs.filter(t => t !== path);
+    let activeTab = s.activeTab;
+    if (activeTab === path) activeTab = tabs.length ? tabs[tabs.length - 1] : null;
+    return { tabs, activeTab };
+  });
+  setActiveTab = (path) => this.setState({ activeTab: path });
+  toggleTreeMode = () => this.setState(s => ({ treeMode: s.treeMode === 'md-only' ? 'full' : 'md-only' }));
+  setTheme = (e) => this.setState({ currentTheme: e.target.value });
+  setSearch = (e) => this.setState({ search: e.target.value });
+  toggleSwitcher = () => this.setState(s => ({ switcherOpen: !s.switcherOpen }));
+  stopProp = (e) => e.stopPropagation();
+
+  filterTree(nodes, mode) {
+    if (mode === 'full') return nodes;
+    const out = [];
+    for (const n of nodes) {
+      if (n.type === 'file') { if (n.name.endsWith('.md')) out.push(n); }
+      else {
+        const children = this.filterTree(n.children, mode);
+        if (children.length) out.push({ ...n, children });
+      }
+    }
+    return out;
+  }
+
+  flatten(nodes, depth, expanded, activeTab) {
+    let out = [];
+    for (const n of nodes) {
+      const isDir = n.type === 'dir';
+      const isMd = !isDir && n.name.endsWith('.md');
+      const isExpanded = isDir && !!expanded[n.path];
+      const isNonMd = !isDir && !isMd;
+      const isFocused = n.path === activeTab;
+      const onClick = () => { if (isDir) this.toggleDir(n.path); else if (isMd) this.openFile(n.path); };
+      const indent = depth * 16 + 8;
+      out.push({
+        path: n.path, name: n.name, isDir, isFile: !isDir, isMd, isNonMd, isExpanded, isFocused, onClick,
+        label: isDir ? (isExpanded ? '\u25be ' : '\u25b8 ') + n.name + '/' : '\ud83d\udcc4 ' + n.name,
+        style: {
+          padding: '3px 8px', paddingLeft: indent + 'px', whiteSpace: 'nowrap', overflow: 'hidden',
+          textOverflow: 'ellipsis', fontSize: 13, cursor: isNonMd ? 'default' : 'pointer',
+          fontWeight: isDir ? 500 : 400, opacity: isNonMd ? 0.45 : 1,
+          background: isFocused ? 'var(--sidebar-selected)' : 'transparent',
+          color: isFocused ? 'var(--sidebar-selected-text)' : 'var(--sidebar-text)',
+        },
+        styleE: {
+          display: 'flex', alignItems: 'center', gap: '7px', padding: '5px 10px', paddingLeft: (depth * 14 + 10) + 'px',
+          fontSize: 12.5, cursor: isNonMd ? 'default' : 'pointer', fontWeight: isDir ? 500 : 400,
+          opacity: isNonMd ? 0.5 : 1, borderRadius: 'var(--radius-sm)',
+          background: isFocused ? 'var(--color-neutral-800)' : 'transparent',
+          color: isFocused ? 'var(--color-accent-300)' : 'var(--color-neutral-200)',
+        },
+      });
+      if (isDir && isExpanded) out = out.concat(this.flatten(n.children, depth + 1, expanded, activeTab));
+    }
+    return out;
+  }
+
+  flattenSearch(nodes, query) {
+    let out = [];
+    for (const n of nodes) {
+      if (n.type === 'file') { if (n.name.toLowerCase().includes(query)) out.push(n); }
+      else out = out.concat(this.flattenSearch(n.children, query));
+    }
+    return out;
+  }
+
+  renderVals() {
+    const { view, expanded, tabs, activeTab, treeMode, currentTheme, contentTheme, search, switcherOpen } = this.state;
+    const filteredTree = this.filterTree(this.tree, treeMode);
+    const treeItems = this.flatten(filteredTree, 0, expanded, activeTab);
+    const searchActive = search.trim().length > 0;
+    const rawResults = searchActive ? this.flattenSearch(filteredTree, search.trim().toLowerCase()) : [];
+    const searchResults = rawResults.map(n => ({
+      path: n.path, name: n.name, onClick: () => this.openFile(n.path),
+      style: {
+        display: 'flex', alignItems: 'center', gap: '7px', padding: '5px 10px', fontSize: 12.5, cursor: 'pointer',
+        borderRadius: 'var(--radius-sm)', margin: '0 4px',
+        background: n.path === activeTab ? 'var(--color-neutral-800)' : 'transparent',
+        color: n.path === activeTab ? 'var(--color-accent-300)' : 'var(--color-neutral-200)',
+      },
+    }));
+
+    const t = this.themes[currentTheme];
+    const currentVarsStyle = {
+      '--md-bg': t.bg, '--md-text': t.text, '--md-heading-color': t.heading, '--md-heading-border': t.headingBorder,
+      '--md-code-bg': t.codeBg, '--md-code-text': t.codeText, '--md-code-border': t.codeBorder, '--md-link': t.link,
+      '--md-blockquote-border': t.quoteBorder, '--md-blockquote-text': t.quoteText, '--md-table-border': t.tableBorder,
+      '--md-table-alt-bg': t.tableAlt, '--toolbar-bg': t.toolbarBg, '--toolbar-text': t.toolbarText,
+      '--toolbar-border': t.toolbarBorder, '--sidebar-bg': t.sidebarBg, '--sidebar-hover': t.sidebarHover,
+      '--sidebar-selected': t.sidebarSelected, '--sidebar-selected-text': t.sidebarSelectedText, '--sidebar-text': t.sidebarText,
+      '--statusbar-bg': t.statusBg, '--statusbar-text': t.statusText, '--statusbar-border': t.statusBorder,
+      '--tab-bg': t.tabBg, '--tab-active-bg': t.tabActiveBg, '--tab-text': t.tabText, '--tab-active-text': t.tabActiveText,
+      '--tab-border': t.tabBorder, '--truncation-bg': t.truncBg, '--truncation-text': t.truncText,
+      '--truncation-border': t.truncBorder, '--panel-bg': t.panelBg, '--resize-handle': t.resize,
+    };
+    const currentVarsStyleStr = Object.entries(currentVarsStyle).map(([k, v]) => `${k}:${v}`).join(';');
+
+    const treeToggleStyle = {
+      display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px',
+      border: '1px solid var(--toolbar-border)', fontSize: 12, cursor: 'pointer', userSelect: 'none',
+      background: treeMode === 'md-only' ? 'var(--md-link)' : 'transparent',
+      borderColor: treeMode === 'md-only' ? 'var(--md-link)' : 'var(--toolbar-border)',
+      color: treeMode === 'md-only' ? '#fff' : 'var(--statusbar-text)',
+    };
+    const treeToggleStyleStr = Object.entries(treeToggleStyle).map(([k, v]) => `${k}:${v}`).join(';');
+
+    const tabObjs = tabs.map(p => ({ path: p, absolutePath: p }));
+    const nameCounts = {};
+    tabObjs.forEach(to => { const n = to.path.split('/').pop(); nameCounts[n] = (nameCounts[n] || 0) + 1; });
+    tabObjs.forEach(to => {
+      const n = to.path.split('/').pop();
+      to.label = nameCounts[n] > 1 ? to.path : n;
+      const isActive = to.path === activeTab;
+      to.onClick = () => this.setActiveTab(to.path);
+      to.onClose = (e) => { e.stopPropagation(); this.closeTab(to.path); };
+      to.onActivateAndClose = () => { this.setActiveTab(to.path); this.toggleSwitcher(); };
+      to.style = {
+        display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 10px', cursor: 'pointer',
+        whiteSpace: 'nowrap', fontSize: 13, borderRight: '1px solid var(--tab-border)',
+        background: isActive ? 'var(--tab-active-bg)' : 'var(--tab-bg)',
+        color: isActive ? 'var(--tab-active-text)' : 'var(--tab-text)',
+        borderBottom: isActive ? '2px solid var(--md-link)' : '2px solid transparent',
+      };
+      to.styleE = {
+        display: 'flex', alignItems: 'center', gap: '8px', padding: '9px 14px', cursor: 'pointer',
+        whiteSpace: 'nowrap', fontSize: 13,
+        color: isActive ? 'var(--color-text)' : 'var(--color-neutral-400)',
+        borderBottom: isActive ? '2px solid var(--color-accent)' : '2px solid transparent',
+      };
+    });
+
+    const doc = this.docs[activeTab] || null;
+    const docForRender = doc ? {
+      ...doc,
+      table: doc.table ? { headers: doc.table.headers, rows: doc.table.rows.map((cells, i) => ({ cells, style: { background: i % 2 === 1 ? 'var(--md-table-alt-bg)' : 'transparent' } })) } : undefined,
+    } : null;
+
+    const ct = this.contentThemes[contentTheme] || this.themes[contentTheme] || this.contentThemes.nocturne;
+    const contentVars = {
+      '--md-bg': ct.bg, '--md-text': ct.text, '--md-heading-color': ct.heading, '--md-heading-border': ct.headingBorder,
+      '--md-code-bg': ct.codeBg, '--md-code-text': ct.codeText, '--md-code-border': ct.codeBorder, '--md-link': ct.link,
+      '--md-blockquote-border': ct.quoteBorder, '--md-blockquote-text': ct.quoteText, '--md-table-border': ct.tableBorder,
+      '--md-table-alt-bg': ct.tableAlt, '--truncation-bg': ct.truncBg, '--truncation-text': ct.truncText, '--truncation-border': ct.truncBorder,
+    };
+    const contentVarsStyle = Object.entries(contentVars).map(([k, v]) => `${k}:${v}`).join(';');
+
+    const pathParts = activeTab ? activeTab.split('/') : [];
+    const crumbs = pathParts.map((p, i) => ({
+      name: p, hasSep: i < pathParts.length - 1,
+      style: { color: i === pathParts.length - 1 ? 'var(--color-neutral-200)' : 'var(--color-neutral-400)' },
+    }));
+
+    return {
+      isCurrent: view === 'current', isEnhanced: view === 'enhanced',
+      showCurrent: this.showCurrent, showEnhanced: this.showEnhanced,
+      treeItems, toggleDir: this.toggleDir, openFile: this.openFile,
+      treeMode, treeModeLabel: treeMode === 'md-only' ? 'MD Only' : 'All Files', toggleTreeMode: this.toggleTreeMode,
+      treeToggleStyle: treeToggleStyleStr,
+      tabObjs, activeTab, setActiveTab: this.setActiveTab, closeTab: this.closeTab,
+      currentTheme, setTheme: this.setTheme, currentVarsStyle: currentVarsStyleStr,
+      doc: docForRender, hasDoc: !!doc,
+      docHasIntro: !!(doc && doc.intro), docHasBullets: !!(doc && doc.bullets), docHasQuote: !!(doc && doc.quote),
+      docHasCode: !!(doc && doc.code), docHasTable: !!(doc && doc.table),
+      search, setSearch: this.setSearch, searchActive, notSearchActive: !searchActive, searchResults, searchEmpty: searchActive && searchResults.length === 0,
+      noDoc: !doc,
+      switcherOpen, toggleSwitcher: this.toggleSwitcher, stopProp: this.stopProp,
+      showSearchBox: this.props?.showSearch ?? true,
+      contentTheme, setContentTheme: this.setContentTheme, contentVarsStyle,
+      sidebarStyle: `width:${this.props?.denseSidebar ? 220 : 280}px; flex-shrink:0; background:var(--color-bg); border-right:1px solid var(--color-neutral-800); display:flex; flex-direction:column;`,
+      crumbs,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
