@@ -99,7 +99,7 @@ mdexplorer /path/to/docs
 
 ## 🛠️ Development
 
-Requirements: a recent Node.js (developed on v24) and npm.
+Requirements: Node.js and npm (developed with Node 24 and npm 11) and Git. See [Development environment](docs/TECH.md#development-environment) for the full list of tested versions.
 
 ```bash
 npm install

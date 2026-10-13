@@ -99,7 +99,7 @@ mdexplorer /path/to/docs
 
 ## 🛠️ 开发
 
-环境要求：较新的 Node.js（开发环境为 v24）与 npm。
+环境要求：Node.js 与 npm（开发环境为 Node 24、npm 11）以及 Git。完整的已测试版本列表见[开发环境](docs/TECH.md#development-environment)（英文）。
 
 ```bash
 npm install

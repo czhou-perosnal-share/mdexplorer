@@ -24,6 +24,31 @@ Some dependencies are pinned on purpose. Newer majors are ESM-only and break the
 
 `react-resizable-panels` v4 exports `Group`, `Panel` and `Separator` (not `PanelGroup` / `PanelResizeHandle`), and uses `orientation` instead of `direction`.
 
+## Development environment
+
+The project is developed and tested with the versions below. Other recent versions will probably work, but these are the ones known to.
+
+| Tool | Version | Notes |
+|---|---|---|
+| OS | Windows 11 (10.0.26100) | The only OS the app has been built and run on so far |
+| Node.js | 24.21.0 | Required to build and run |
+| npm | 11.8.0 | Comes with Node.js; the lockfile is `package-lock.json` (use npm, not yarn or pnpm) |
+| Git | 2.55 | |
+| Electron | 43.1.1 | Installed by `npm install`, no global install needed |
+| TypeScript | 7.0.2 | Installed by `npm install`. Note: TypeScript 7 has no JavaScript compiler API, so tools built on it, such as `typescript-eslint`, do not work |
+| Vite / Vitest | 5.4 / 4.1 | Installed by `npm install` |
+| Windows PowerShell | 5.1 | Only for `scripts/reinstall.ps1` |
+| GitHub CLI (`gh`) | 2.102 | Optional, for opening PRs |
+| OpenSpec CLI | 1.6.0 | Optional, for `openspec/` changes (`npm install -g @fission-ai/openspec`) |
+
+Check your setup:
+
+```bash
+node -v && npm -v && git --version
+```
+
+Building installers for macOS and Linux has not been tried yet. On Linux, `.deb` and `.rpm` builds also need `dpkg`, `fakeroot` and `rpmbuild` on the machine.
+
 ## Folder structure
 
 ```

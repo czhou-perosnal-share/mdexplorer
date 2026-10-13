@@ -4,7 +4,7 @@ Thanks for helping out! Issues and pull requests are welcome. This guide covers 
 
 ## Getting set up
 
-Requirements: a recent Node.js (developed on v24) and npm.
+Requirements: Node.js and npm (developed with Node 24 and npm 11) and Git. See [Development environment](docs/TECH.md#development-environment) for the full list of tested versions.
 
 ```bash
 git clone git@github.com:czhou-perosnal-share/mdexplorer.git
