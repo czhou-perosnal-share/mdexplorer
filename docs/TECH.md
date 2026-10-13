@@ -33,13 +33,12 @@ The project is developed and tested with the versions below. Other recent versio
 | Node.js | 24.21.0 | Required to build and run |
 | npm | 11.8.0 | Comes with Node.js |
 | TypeScript | 7.0.2 | Installed by `npm install` |
-| Git | 2.55 | |
 | OpenSpec CLI | 1.6.0 | Required for changes under `openspec/` (`npm install -g @fission-ai/openspec`) |
 
 Check your setup:
 
 ```bash
-node -v && npm -v && git --version && openspec --version
+node -v && npm -v && openspec --version
 ```
 
 Building installers for macOS and Linux has not been tried yet. On Linux, `.deb` and `.rpm` builds also need `dpkg`, `fakeroot` and `rpmbuild` on the machine.
