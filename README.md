@@ -25,22 +25,24 @@ Open a huge docs folder instantly, search it without freezing, and read in a the
 
 ## 🎯 Why MdExplorer
 
-There are quite a few projects on GitHub called "mdexplorer". This one has a deliberately narrow goal:
+> **Your documentation, ready to read in seconds. Nothing to set up. Nothing to get in the way.**
 
-> **Open a folder, read its Markdown files. That's it.**
+Teams keep specs, runbooks, design notes and knowledge bases as Markdown in folders. Reading them usually means launching a heavyweight editor, a note-taking suite, or a web service, and paying for features you never use. (And yes, there are many projects named "mdexplorer" on GitHub. This one does one thing, and does it well.)
 
-I wanted a tool to *view* the Markdown files under a folder: easy to use, light, and focused on reading and presenting. Most Markdown apps are editors or note-taking systems, and they bring a lot I don't need when I only want to read.
+MdExplorer is built for the person who just needs to **read and present**.
 
-**What it focuses on**
-- 📖 **Reading and presenting.** Clean rendering, comfortable themes, tabs and quick navigation between linked documents.
-- 🪶 **Light and simple.** One window: a folder tree, a search box, and your documents. No accounts, no database, no setup.
-- 🚀 **Fast on big folders.** Folders load only when you open them and search runs in the background, so large documentation trees stay responsive.
+| What you need | What MdExplorer delivers |
+|---|---|
+| **Get to the content fast** | Point it at a folder and start reading. Folders load only when you open them, so even very large documentation trees stay responsive. |
+| **Find the right page** | Background search across file names and contents. Keep reading while results arrive. |
+| **Follow the story across documents** | Click a link and the target opens in a tab, never twice. Jump back and forth without losing your place. |
+| **Present with confidence** | Clean, consistent rendering with polished themes: Nocturne, Light, Graphite and High contrast. |
+| **Zero risk to your files** | Strictly read-only. MdExplorer never modifies, moves or deletes anything. |
+| **No overhead** | No accounts, no cloud, no subscription, no database, no plugins to maintain. |
 
-**What it deliberately does not do**
-- ✋ No editing. MdExplorer is read-only and never modifies your files.
-- ✋ No note-taking, syncing, publishing, plugins or cloud features.
+### Built to be focused, not feature-rich
 
-If you want to write Markdown, use your favorite editor and keep MdExplorer open next to it as the reader.
+We say "no" to editing, note management, sync, publishing and plugins, on purpose. Fewer moving parts means less to learn, less to maintain and less that can go wrong. Need to write? Keep your favorite editor open and let MdExplorer be the reader next to it.
 
 ## ✨ Features
 
