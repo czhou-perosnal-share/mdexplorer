@@ -35,15 +35,36 @@
 
 ## 🚀 快速开始
 
-### 安装
+### 构建与安装
 
-为你的平台构建安装包（见[开发](#-开发)）：
+目前还没有预编译的下载包，需要自行构建安装包。请在目标操作系统上构建（安装包不能跨平台构建）。
 
-| 平台 | `npm run make` 的输出 |
-|---|---|
-| Windows | `out/make/squirrel.windows/x64/MdExplorer-<版本> Setup.exe` |
-| macOS | `out/make/zip/darwin/…`（ZIP） |
-| Linux | `out/make/deb/…` 和 `out/make/rpm/…` |
+```bash
+# 1. 获取代码
+git clone git@github.com:czhou-perosnal-share/mdexplorer.git
+cd mdexplorer
+
+# 2. 安装依赖
+npm install
+
+# 3. 为当前操作系统构建安装包
+npm run make
+```
+
+构建结果输出到 `out/make/`：
+
+| 平台 | 输出文件 | 安装方式 |
+|---|---|---|
+| Windows | `out/make/squirrel.windows/x64/MdExplorer-<版本> Setup.exe` | 直接运行。静默安装（无向导）到 `%LOCALAPPDATA%\MdExplorer`，并创建开始菜单和桌面快捷方式。 |
+| macOS | `out/make/zip/darwin/<架构>/MdExplorer-darwin-<架构>-<版本>.zip` | 解压后将 `MdExplorer.app` 拖入“应用程序”。 |
+| Linux（Debian/Ubuntu） | `out/make/deb/<架构>/*.deb` | `sudo dpkg -i <文件>.deb` |
+| Linux（Fedora/RHEL） | `out/make/rpm/<架构>/*.rpm` | `sudo rpm -i <文件>.rpm` |
+
+在 Linux 上构建还需要在构建机器上安装打包工具（`.deb` 需要 `dpkg` 和 `fakeroot`，`.rpm` 需要 `rpmbuild`）。
+
+想先试用而不安装？运行 `npm start` 打开开发窗口，或运行 `npm run package` 在 `out/` 下生成免安装的应用并直接启动。
+
+更新时：拉取最新代码，再次运行 `npm run make` 并重新运行安装程序即可。
 
 ### 打开文件夹
 

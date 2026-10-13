@@ -35,15 +35,36 @@ Open a huge docs folder instantly, search it without freezing, and read in a the
 
 ## 🚀 Getting started
 
-### Install
+### Build and install
 
-Build the installer for your platform (see [Development](#-development)):
+There is no prebuilt download yet, so you build the installer yourself. You must build on the operating system you are targeting (installers cannot be cross-built).
 
-| Platform | Output of `npm run make` |
-|---|---|
-| Windows | `out/make/squirrel.windows/x64/MdExplorer-<version> Setup.exe` |
-| macOS | `out/make/zip/darwin/…` (ZIP) |
-| Linux | `out/make/deb/…` and `out/make/rpm/…` |
+```bash
+# 1. Get the code
+git clone git@github.com:czhou-perosnal-share/mdexplorer.git
+cd mdexplorer
+
+# 2. Install dependencies
+npm install
+
+# 3. Build the installer / package for your current OS
+npm run make
+```
+
+The result is written to `out/make/`:
+
+| Platform | Output | How to install |
+|---|---|---|
+| Windows | `out/make/squirrel.windows/x64/MdExplorer-<version> Setup.exe` | Run it. It installs silently (no wizard) to `%LOCALAPPDATA%\MdExplorer` and adds Start menu and desktop shortcuts. |
+| macOS | `out/make/zip/darwin/<arch>/MdExplorer-darwin-<arch>-<version>.zip` | Unzip and drag `MdExplorer.app` to `Applications`. |
+| Linux (Debian/Ubuntu) | `out/make/deb/<arch>/*.deb` | `sudo dpkg -i <file>.deb` |
+| Linux (Fedora/RHEL) | `out/make/rpm/<arch>/*.rpm` | `sudo rpm -i <file>.rpm` |
+
+Linux builds additionally need the packaging tools on the build machine (`dpkg` and `fakeroot` for `.deb`, `rpmbuild` for `.rpm`).
+
+Want to try the app without installing? Run `npm start` for a development window, or `npm run package` to produce an unpacked app in `out/` that you can launch directly.
+
+To update, pull the latest code, run `npm run make` again and re-run the installer.
 
 ### Open a folder
 
