@@ -1,12 +1,14 @@
-import React, { useState, useCallback, useRef } from 'react';
-import type { TreeNode, FileNode, DirNode } from '../../main';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import type { TreeNode, FileNode, DirNode, TreeMode } from '../../main';
 
 interface FolderTreeProps {
-  tree: TreeNode[];
-  mode: 'md-only' | 'full';
-  filterQuery: string;
+  rootFolder: string;
+  mode: TreeMode;
+  /** Bump to re-list the root and every expanded folder. */
+  refreshKey: number;
   onFileSelect: (absolutePath: string, relativePath: string) => void;
   onOpenError?: (msg: string) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 interface FlatItem {
@@ -15,44 +17,15 @@ interface FlatItem {
   key: string;
 }
 
-function flatten(nodes: TreeNode[], depth: number, expanded: Set<string>): FlatItem[] {
-  const result: FlatItem[] = [];
-  for (const node of nodes) {
-    const key = node.type === 'file' ? (node as FileNode).absolutePath : `dir:${(node as DirNode).name}:${depth}`;
-    result.push({ node, depth, key });
-    if (node.type === 'dir' && expanded.has(key)) {
-      result.push(...flatten((node as DirNode).children, depth + 1, expanded));
-    }
-  }
-  return result;
-}
-
-function flattenAllFiles(nodes: TreeNode[]): FileNode[] {
-  const result: FileNode[] = [];
-  for (const node of nodes) {
-    if (node.type === 'file') result.push(node as FileNode);
-    else result.push(...flattenAllFiles((node as DirNode).children));
-  }
-  return result;
-}
-
-function buildTopLevelExpandedSet(nodes: TreeNode[]): Set<string> {
-  const s = new Set<string>();
-  for (const node of nodes) {
-    if (node.type === 'dir') s.add(`dir:${(node as DirNode).name}:0`);
-  }
-  return s;
-}
-
 function isMdFile(name: string): boolean {
   return name.endsWith('.md');
 }
 
-function FolderIcon() {
+function FolderIcon({ open }: { open: boolean }) {
   return (
     <svg className="folder-tree__icon" width="13" height="13" viewBox="0 0 16 16" fill="none"
       stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M1.5 3.5h4l1.5 2h7v7h-12.5z" />
+      {open ? <path d="M1.5 12.5v-9h4l1.5 2h7v2M1.5 12.5l2-5h12l-2 5z" /> : <path d="M1.5 3.5h4l1.5 2h7v7h-12.5z" />}
     </svg>
   );
 }
@@ -67,113 +40,108 @@ function DocIcon() {
   );
 }
 
-export function FolderTree({ tree, mode, filterQuery, onFileSelect, onOpenError }: FolderTreeProps) {
-  const [expanded, setExpanded] = useState<Set<string>>(() => buildTopLevelExpandedSet(tree));
+export function FolderTree({ rootFolder, mode, refreshKey, onFileSelect, onOpenError, onLoadingChange }: FolderTreeProps) {
+  // Folder contents are fetched one level at a time, only when a folder is expanded.
+  const [children, setChildren] = useState<Record<string, TreeNode[]>>({});
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [loading, setLoading] = useState<Set<string>>(new Set());
   const [focusIdx, setFocusIdx] = useState(0);
-  const listRef = useRef<HTMLDivElement>(null);
   const lastClick = useRef<Record<string, number>>({});
+  const expandedRef = useRef(expanded);
+  expandedRef.current = expanded;
+  // Guards against responses from a previous folder/mode landing after a switch.
+  const generation = useRef(0);
+  const prevContext = useRef({ rootFolder, mode });
 
-  // Always compute items (cheap) so hooks below can always reference it
-  const items = flatten(tree, 0, expanded);
-  const q = filterQuery.trim().toLowerCase();
+  const list = useCallback((dir: string) => window.api.listDir(dir, rootFolder, mode), [rootFolder, mode]);
 
-  const toggleDir = useCallback((key: string) => {
-    setExpanded(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
+  useEffect(() => {
+    const gen = ++generation.current;
+    const contextChanged = prevContext.current.rootFolder !== rootFolder || prevContext.current.mode !== mode;
+    prevContext.current = { rootFolder, mode };
+    if (!rootFolder) { setChildren({}); setExpanded(new Set()); return; }
+
+    // Switching folder or mode starts from a collapsed root; a plain refresh keeps what is open.
+    const dirsToLoad = contextChanged ? [rootFolder] : [rootFolder, ...expandedRef.current];
+    if (contextChanged) { setChildren({}); setExpanded(new Set()); }
+
+    onLoadingChange?.(true);
+    Promise.all(dirsToLoad.map(async (d) => [d, await list(d)] as const)).then((pairs) => {
+      if (gen !== generation.current) return;
+      const next: Record<string, TreeNode[]> = {};
+      for (const [d, nodes] of pairs) next[d] = nodes;
+      setChildren(next);
+      // Drop expanded folders that no longer exist
+      setExpanded(prev => new Set([...prev].filter(d => d in next)));
+      onLoadingChange?.(false);
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rootFolder, mode, refreshKey]);
 
-  const activateMd = useCallback((item: FlatItem) => {
-    if (item.node.type === 'file') {
-      const f = item.node as FileNode;
-      onFileSelect(f.absolutePath, f.relativePath);
-    } else {
-      toggleDir(item.key);
+  const toggleDir = useCallback(async (dir: DirNode) => {
+    const key = dir.absolutePath;
+    if (expandedRef.current.has(key)) {
+      setExpanded(prev => { const n = new Set(prev); n.delete(key); return n; });
+      return;
     }
+    setExpanded(prev => new Set(prev).add(key));
+    if (children[key]) return;
+    const gen = generation.current;
+    setLoading(prev => new Set(prev).add(key));
+    const nodes = await list(key);
+    if (gen !== generation.current) return;
+    setChildren(prev => ({ ...prev, [key]: nodes }));
+    setLoading(prev => { const n = new Set(prev); n.delete(key); return n; });
+  }, [children, list]);
+
+  const items: FlatItem[] = [];
+  const walk = (dir: string, depth: number) => {
+    for (const node of children[dir] ?? []) {
+      items.push({ node, depth, key: node.absolutePath });
+      if (node.type === 'dir' && expanded.has(node.absolutePath)) walk(node.absolutePath, depth + 1);
+    }
+  };
+  walk(rootFolder, 0);
+
+  const activate = useCallback((item: FlatItem) => {
+    if (item.node.type === 'dir') { toggleDir(item.node); return; }
+    if (isMdFile(item.node.name)) onFileSelect(item.node.absolutePath, item.node.relativePath);
   }, [onFileSelect, toggleDir]);
 
-  const handleClick = useCallback((item: FlatItem, idx: number) => {
+  const handleClick = useCallback(async (item: FlatItem, idx: number, e: React.MouseEvent) => {
     setFocusIdx(idx);
-    if (item.node.type === 'dir') { toggleDir(item.key); return; }
-    const f = item.node as FileNode;
-    if (isMdFile(f.name)) onFileSelect(f.absolutePath, f.relativePath);
-  }, [onFileSelect, toggleDir]);
-
-  const handleDoubleClick = useCallback(async (item: FlatItem) => {
-    if (item.node.type !== 'file') return;
-    const f = item.node as FileNode;
-    if (!isMdFile(f.name)) {
-      const err = await window.api.openPath(f.absolutePath);
-      if (err && onOpenError) onOpenError(err);
-    }
-  }, [onOpenError]);
-
-  const handleClickWithDblDetect = useCallback((item: FlatItem, idx: number, e: React.MouseEvent) => {
-    if (item.node.type === 'file' && !isMdFile((item.node as FileNode).name)) {
-      const now = e.timeStamp;
+    if (item.node.type === 'file' && !isMdFile(item.node.name)) {
+      // Non-markdown files open externally on double click
       const last = lastClick.current[item.key] ?? 0;
-      lastClick.current[item.key] = now;
-      if (now - last < 400) { handleDoubleClick(item); return; }
+      lastClick.current[item.key] = e.timeStamp;
+      if (e.timeStamp - last < 400) {
+        const err = await window.api.openPath((item.node as FileNode).absolutePath);
+        if (err && onOpenError) onOpenError(err);
+      }
+      return;
     }
-    handleClick(item, idx);
-  }, [handleClick, handleDoubleClick]);
+    activate(item);
+  }, [activate, onOpenError]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const item = items[focusIdx];
     if (e.key === 'ArrowDown' || e.key === 'j') {
       e.preventDefault(); setFocusIdx(i => Math.min(i + 1, items.length - 1));
     } else if (e.key === 'ArrowUp' || e.key === 'k') {
       e.preventDefault(); setFocusIdx(i => Math.max(i - 1, 0));
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault(); if (items[focusIdx]) activateMd(items[focusIdx]);
+    } else if (e.key === 'ArrowRight' && item?.node.type === 'dir' && !expanded.has(item.key)) {
+      e.preventDefault(); toggleDir(item.node);
+    } else if (e.key === 'ArrowLeft' && item?.node.type === 'dir' && expanded.has(item.key)) {
+      e.preventDefault(); toggleDir(item.node);
+    } else if ((e.key === 'Enter' || e.key === ' ') && item) {
+      e.preventDefault(); activate(item);
     }
-  }, [items, focusIdx, activateMd]);
+  }, [items, focusIdx, expanded, activate, toggleDir]);
 
-  /* Filter mode — all hooks already called above */
-  if (q) {
-    const allFiles = flattenAllFiles(tree);
-    const matches = allFiles.filter(f => f.name.toLowerCase().includes(q));
-
-    if (matches.length === 0) {
-      return (
-        <div className="folder-tree folder-tree--empty">
-          <span>No files match "{filterQuery}"</span>
-        </div>
-      );
-    }
-
-    return (
-      <div className="folder-tree" tabIndex={0} ref={listRef}>
-        {matches.map((f, idx) => (
-          <div
-            key={f.absolutePath}
-            className={[
-              'folder-tree__item',
-              isMdFile(f.name) ? 'folder-tree__item--file' : 'folder-tree__item--non-md',
-              idx === focusIdx ? 'folder-tree__item--focused' : '',
-            ].filter(Boolean).join(' ')}
-            style={{ paddingLeft: '10px' }}
-            onClick={() => {
-              setFocusIdx(idx);
-              if (isMdFile(f.name)) onFileSelect(f.absolutePath, f.relativePath);
-            }}
-            title={f.relativePath}
-          >
-            <DocIcon />
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.name}</span>
-            {!isMdFile(f.name) && (
-              <span className="tree-bin-tag">bin</span>
-            )}
-          </div>
-        ))}
-      </div>
-    );
+  if (!rootFolder) {
+    return <div className="folder-tree folder-tree--empty"><span>No folder open</span></div>;
   }
-
-  /* Normal tree mode */
-  if (tree.length === 0) {
+  if (items.length === 0 && rootFolder in children) {
     return (
       <div className="folder-tree folder-tree--empty">
         <span>{mode === 'full' ? 'Folder is empty' : 'No Markdown files found'}</span>
@@ -182,12 +150,10 @@ export function FolderTree({ tree, mode, filterQuery, onFileSelect, onOpenError 
   }
 
   return (
-    <div className="folder-tree" tabIndex={0} onKeyDown={handleKeyDown} ref={listRef}>
+    <div className="folder-tree" tabIndex={0} onKeyDown={handleKeyDown}>
       {items.map((item, idx) => {
         const isDir = item.node.type === 'dir';
-        const fileName = isDir ? (item.node as DirNode).name : (item.node as FileNode).name;
-        const isNonMd = !isDir && !isMdFile(fileName);
-
+        const isNonMd = !isDir && !isMdFile(item.node.name);
         return (
           <div
             key={item.key}
@@ -198,11 +164,12 @@ export function FolderTree({ tree, mode, filterQuery, onFileSelect, onOpenError 
               idx === focusIdx ? 'folder-tree__item--focused' : '',
             ].filter(Boolean).join(' ')}
             style={{ paddingLeft: `${item.depth * 14 + 10}px` }}
-            onClick={(e) => handleClickWithDblDetect(item, idx, e)}
-            title={item.node.type === 'file' ? (item.node as FileNode).relativePath : undefined}
+            onClick={(e) => handleClick(item, idx, e)}
+            title={item.node.relativePath}
           >
-            {isDir ? <FolderIcon /> : <DocIcon />}
-            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fileName}</span>
+            {isDir ? <FolderIcon open={expanded.has(item.key)} /> : <DocIcon />}
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.node.name}</span>
+            {isDir && loading.has(item.key) && <span className="tree-bin-tag">…</span>}
             {isNonMd && <span className="tree-bin-tag">bin</span>}
           </div>
         );

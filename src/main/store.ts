@@ -9,12 +9,15 @@ export interface WindowBounds {
 
 export type ContentTheme = 'nocturne' | 'github' | 'nord' | 'dracula' | 'plain';
 
+export type UiTheme = 'nocturne' | 'light' | 'graphite' | 'contrast';
+
 export interface AppState {
   lastFolder: string;
   openTabs: string[];
   activeTab: string;
   scrollPositions: Record<string, number>;
   contentTheme: ContentTheme;
+  uiTheme: UiTheme;
   treeMode: 'md-only' | 'full';
   windowBounds: WindowBounds;
 }
@@ -25,6 +28,7 @@ const defaults: AppState = {
   activeTab: '',
   scrollPositions: {},
   contentTheme: 'nocturne',
+  uiTheme: 'nocturne',
   treeMode: 'md-only',
   windowBounds: { x: undefined as unknown as number, y: undefined as unknown as number, width: 1200, height: 800 },
 };
@@ -38,6 +42,7 @@ export function getState(): AppState {
     activeTab: store.get('activeTab', defaults.activeTab),
     scrollPositions: store.get('scrollPositions', defaults.scrollPositions),
     contentTheme: store.get('contentTheme', defaults.contentTheme),
+    uiTheme: store.get('uiTheme', defaults.uiTheme),
     treeMode: store.get('treeMode', defaults.treeMode),
     windowBounds: store.get('windowBounds', defaults.windowBounds),
   };

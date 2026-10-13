@@ -5,6 +5,7 @@ interface MarkdownViewerProps {
   content: string;
   lineCount: number;
   relativePath: string;
+  onLinkClick: (href: string) => void;
   initialScroll?: number;
   onScrollChange: (px: number) => void;
 }
@@ -21,6 +22,7 @@ export function MarkdownViewer({
   content,
   lineCount,
   relativePath,
+  onLinkClick,
   initialScroll,
   onScrollChange,
 }: MarkdownViewerProps) {
@@ -44,6 +46,29 @@ export function MarkdownViewer({
     }
   };
 
+  // Heading anchors: GitHub-style slug of the heading text
+  const scrollToAnchor = (fragment: string) => {
+    const root = scrollRef.current;
+    if (!root) return;
+    let id = fragment;
+    try { id = decodeURIComponent(fragment); } catch { /* keep as is */ }
+    const slug = (t: string) => t.trim().toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s/g, '-');
+    const target =
+      root.querySelector<HTMLElement>(`[id="${CSS.escape(id)}"]`) ??
+      Array.from(root.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5,h6')).find(h => slug(h.textContent ?? '') === id.toLowerCase());
+    target?.scrollIntoView();
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    const anchor = (e.target as HTMLElement).closest('a');
+    if (!anchor) return;
+    const href = anchor.getAttribute('href');
+    e.preventDefault(); // never navigate the app window
+    if (!href) return;
+    if (href.startsWith('#')) scrollToAnchor(href.slice(1));
+    else onLinkClick(href);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const el = scrollRef.current;
     if (!el) return;
@@ -65,6 +90,7 @@ export function MarkdownViewer({
         tabIndex={0}
         onScroll={handleScroll}
         onKeyDown={handleKeyDown}
+        onClick={handleClick}
       >
         <div
           className="viewer-content"
