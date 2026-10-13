@@ -32,7 +32,7 @@ The project is developed and tested with the versions below. Other recent versio
 |---|---|---|
 | OS | Windows 11 (10.0.26100) | The only OS the app has been built and run on so far |
 | Node.js | 24.21.0 | Required to build and run |
-| npm | 11.8.0 | Comes with Node.js; the lockfile is `package-lock.json` (use npm, not yarn or pnpm) |
+| npm | 11.8.0 | Comes with Node.js. Use npm, not yarn or pnpm. `package-lock.json` is not committed, so `npm install` resolves versions from `package.json`; if a new release breaks the build, tighten the range there |
 | Git | 2.55 | |
 | Electron | 43.1.1 | Installed by `npm install`, no global install needed |
 | TypeScript | 7.0.2 | Installed by `npm install`. Note: TypeScript 7 has no JavaScript compiler API, so tools built on it, such as `typescript-eslint`, do not work |

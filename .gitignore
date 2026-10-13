@@ -28,3 +28,6 @@ npm-debug.log*
 
 # Local demo folder (used for screenshots)
 sample/
+
+# Lockfile is not committed (it records the local npm registry host)
+package-lock.json
